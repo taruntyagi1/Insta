@@ -1,0 +1,422 @@
+{% extends "frame.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load image_tags %}
+{% load display_tags %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load category_saperator %}
+{% load category_tags %}
+{% block customheadend %}
+<!--<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
+{% endblock %}
+{% block page-content %}
+
+<section class="breadcrumbs-custom">
+    {% if current_category %}
+        <div class="parallax-container" data-parallax-img="{{ MEDIA_URL }}{{ current_category.image }}">
+            <div class="breadcrumbs-custom-body parallax-content context-dark">
+                <div class="container">
+                    <h2 class="text-transform-capitalize breadcrumbs-custom-title">{{ current_category.name }}</h2>
+                    <h5 class="breadcrumbs-custom-text">
+                        <div class="d-lg-block d-md-block d-none">
+                        {{ current_category.description|safe|striptags|truncatechars:700 }}
+                        </div>
+                        <div class="d-lg-none d-md-none d-block">
+                        {{ current_category.description|safe|striptags|truncatechars:100 }}
+                        </div>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="parallax-container" data-parallax-img="{% static 'images/about-us-5.png' %}">
+            <div class="breadcrumbs-custom-body parallax-content context-dark">
+                <div class="container">
+                    <h2 class="text-transform-capitalize breadcrumbs-custom-title">Health Store </h2>
+                    <h5 class="breadcrumbs-custom-text">
+                        Perfect selection of specially designed food products and ingredients <br class="d-none d-md-block">for
+                        every need offering great taste, health benefits and value for money!
+                    </h5>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% comment %} <div class="breadcrumbs-custom-footer">
+        <div class="container">
+            <ul class="breadcrumbs-custom-path">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="grid-shop.html">Shop</a></li>
+                <li class="active">Shop List</li>
+            </ul>
+        </div>
+    </div> {% endcomment %}
+</section>
+<!-- Section Shop-->
+<section class="section section-xxl bg-default text-md-left">
+    <div class="container">
+        <div class="row row-50">
+            
+              <div class="col-lg-4 col-xl-3">
+                  <form id="shop-list-filter">
+                  <div class="aside row row-30 row-md-50 justify-content-md-between">
+                      
+                          <div class="aside-item col-12">
+                              <h6 class="aside-title">Filter by Price</h6>
+                              <!-- RD Range-->
+                              <div class="rd-range" data-min="0" data-max="{{max_price}}" data-min-diff="100" {% if request.GET.min_price and request.GET.max_price %} data-start="[{{request.GET.min_price}}, {{request.GET.max_price}}]" {% else %} data-start="[0, {{max_price}}]" {% endif %} data-step="100" data-tooltip="false" data-input=".rd-range-input-value-1" data-input-2=".rd-range-input-value-2"></div>
+                              <div class="group-xs group-justify">
+                                  <div class="col-12">
+                                      <div class="rd-range-wrap">
+                                          <div class="rd-range-title">Price:</div>
+                                          <div class="rd-range-form-wrap"><span><i class="fa fa-rupee"></i></span>
+                                              <input class="rd-range-input rd-range-input-value-1 ml-2" type="text"
+                                                    name="min_price" value="{{request.GET.min_price}}">
+                                          </div>
+                                          <div class="rd-range-divider"></div>
+                                          <div class="rd-range-form-wrap"><span><i class="fa fa-rupee"></i></span>
+                                              <input class="rd-range-input rd-range-input-value-2 ml-2" type="text"
+                                                    name="max_price" value="{{request.GET.max_price}}">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-12">
+                                      <button class="button button-sm button-primary button-zakaria" id="price-filter"
+                                              type="submit">Filter
+                                      </button>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="aside-item col-sm-6 col-md-5 col-lg-12 mt-lg-5">
+                              <h6 class="aside-title">Categories</h6>
+                              <ul class="list-shop-filter">
+                                  {% for obj in category_list %}
+                                  <li>
+                                      <label class="checkbox-inline" for="checkbox-{{obj.id}}">
+                                          <input name="category" id="checkbox-{{obj.id}}" value="{{obj.id}}"
+                                                type="checkbox" {% if obj.id in search_category %} checked {% endif %}>
+                                          {{obj.name}}
+                                      </label>
+                                      <span class="list-shop-filter-number">({{obj.product_set.all | length}})</span>
+                                  </li>
+                                  {% endfor %}
+                              </ul>
+                              <button class="button button-sm button-primary button-zakaria" id="shop-list-filter-btn"
+                                      type="submit">Submit
+                              </button>
+                              <!-- RD Search Form-->
+                              <form class="rd-search form-search" action="search-results.html" method="GET">
+                                  <div class="form-wrap search-wrapper">
+                                      <input class="form-input" id="search-form" type="text" name="s" autocomplete="off">
+                                      <label class="form-label" for="search-form">Search in shop...</label>
+                                      <button class="button-search fl-bigmug-line-search74" type="button"></button>
+                                      <div class="search-custom-data-list" id="search-custom-data-list">
+                                          <ul>
+
+                                          </ul>
+                                      </div>
+                                  </div>
+
+                              </form>
+                          </div>
+                          <div class="aside-item col-sm-6 col-lg-12">
+                              <h6 class="aside-title">Popular products</h6>
+                              <div class="row row-10 row-lg-20 gutters-10">
+                                  {% for obj in popular_product %}
+                                      {% if forloop.counter <= 3 %}
+                                          <div class="col-4 col-sm-6 col-md-12">
+                                              <!-- Product Minimal-->
+                                              <article class="product-minimal">
+                                                  <div class="unit unit-spacing-sm flex-column flex-md-row align-items-center">
+                                                      <div class="unit-left shop-list-popular-product"><a
+                                                              class="product-minimal-figure" href="{{ obj.get_absolute_url }}"><img
+                                                              src="{{MEDIA_URL}}{{obj.primary_image.original}}" alt="" width="106"
+                                                              height="104"/></a></div>
+                                                      <div class="unit-body">
+                                                          <p class="product-minimal-title"><a href="{{ obj.get_absolute_url }}">{{obj.title|truncatechars:30}}</a>
+                                                          </p>
+                                                          {% comment %} <p class="product-minimal-price">$13.00</p> {% endcomment %}
+                                                          <div class="product-price"><i class="fa fa-rupee"></i> {{ obj.stockrecords.first.price_excl_tax }}
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </article>
+                                          </div>
+                                      {% endif %}
+                                  {% endfor %}
+                              </div>
+                          </div>
+                  </div>
+                  </form>
+              </div>
+              <div class="col-lg-8 col-xl-9">
+                <div class="product-top-panel group-md">
+                    <p class="product-top-panel-title">Showing {{object_list|length}} of {{total_product}} results</p>
+                    <div>
+                        <div class="group-sm group-middle">
+                            <form id="sort-by-form">
+                                <div class="product-top-panel-sorting">
+                                    <select name="sortby" onchange="document.getElementById('sort-by-form').submit()">
+                                        <option {% if request.GET.sortby == '-date_created' %} selected {% endif %} value="-date_created">Sort by newness</option>
+                                        <option value="title" {% if request.GET.sortby == 'title' %} selected {% endif %}>Sort by alphabet</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-30 row-md-50 row-lg-60">
+                    <!-- Product-->
+                    {% for product in object_list %}
+                        {% if not product.is_parent %}
+                            <div class="col-12 featured-product-card" id="featured-product-{{product.id}}">
+                                <article class="product-modern text-center text-sm-left">
+                                    <div class="unit unit-spacing-0 flex-column flex-sm-row">
+                                        <div class="unit-left">
+                                            <a class="product-modern-figure" href="{{ product.get_absolute_url}}">
+                                                <img src="{{MEDIA_URL}}{{product.primary_image.original}}" alt="{{product.get_title}}" width="328" height="330"/>
+                                            </a>
+                                        </div>
+                                        <div class="unit-body">
+                                            <div class="product-modern-body">
+                                                <h4 class="product-modern-title">
+                                                    <a href="{{ product.get_absolute_url}}">{{product.title|truncatechars:35}}</a>
+                                                </h4>
+                                                {% if product.stockrecords.first.price_excl_tax == product.stockrecords.first.price_retail %}
+                                                <div class="product-price-wrap">
+                                                    <div class="product-price"><i class="fa fa-rupee"></i> {{ product.stockrecords.first.price_excl_tax }}</div>
+                                                </div>
+                                                {% else %}
+                                                <div class="product-price-wrap">
+                                                    <div class="product-price product-price-old">
+                                                        <i class="fa fa-rupee"></i> {{ product.stockrecords.first.price_retail }}
+                                                    </div>
+                                                    <div class="product-price"><i class="fa fa-rupee"></i> {{ product.stockrecords.first.price_excl_tax }} </div>
+                                                </div>
+                                                {% endif %}
+                                                <div class="d-none d-lg-block d-md-block">
+                                                {{product.description|safe|striptags|truncatechars:250}}
+                                                </div>
+                                                <div class="d-block d-lg-none d-md-none">
+                                                {{product.description|safe|striptags|truncatechars:70}}
+                                                </div>
+                                                {% if not product.is_parent %}
+                                                    {% block product_basket_form %}
+                                                        {% include "catalogue/partials/add_to_basket_form.html" %}
+                                                    {% endblock %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        {% else %}
+                            <div class="col-12 featured-product-card" id="featured-product-{{product.id}}">
+                                <article class="product-modern text-center text-sm-left">
+                                    <div class="unit unit-spacing-0 flex-column flex-sm-row">
+                                        <div class="unit-left">
+                                            <a class="product-modern-figure" href="{{ product.get_absolute_url}}">
+                                                <img src="{{MEDIA_URL}}{{product.primary_image.original}}" alt="{{product.get_title}}" width="328" height="330"/>
+                                            </a>
+                                        </div>
+                                        <div class="unit-body">
+                                            <div class="product-modern-body">
+                                                <h4 class="product-modern-title">
+                                                    <a href="{{ product.get_absolute_url}}">{{product.title|truncatechars:35}}</a>
+                                                </h4>
+                                                <select class="form-control variant-select">
+                                                    {% for child in product.variants_list %}
+                                                        <option value="{{child.id}}" data-discount="{{child.percent_discount}}" data-retail-price="{{child.stockrecords.first.price_retail}}" data-selling-price={{child.stockrecords.first.price_excl_tax}}>{{child.title}}</option>
+                                                    {% endfor %}                                    
+                                                </select>
+                                                {% if product.variants_list|length > 0 %}
+                                                    <div class="product-price-wrap">
+                                                        <div class="product-price product-price-old">
+                                                            <i class="fa fa-rupee"></i> 
+                                                            <span class="price-detail">{{product.variants_list.0.stockrecords.first.price_retail}}</span>
+                                                        </div>
+                                                        <div class="product-price">
+                                                            <i class="fa fa-rupee"></i>
+                                                            <span class="selling-price">{{product.variants_list.0.stockrecords.first.price_excl_tax}}</span>
+                                                        </div>
+                                                        {% if product.variants_list.0.percent_discount %}
+                                                        <div class="discount_percent" style="color: red;">
+                                                            <span class="discount-price">{{product.variants_list.0.percent_discount}}% off</span>
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                                <div class="d-none d-lg-block d-md-block">
+                                                {{product.description|safe|striptags|truncatechars:250}}
+                                                </div>
+                                                <div class="d-block d-lg-none d-md-none">
+                                                {{product.description|safe|striptags|truncatechars:70}}
+                                                </div>
+                                                {% if product.variants_list|length > 0 %}
+                                                {% with product=product.variants_list.0 %}
+                                                    {% include "catalogue/partials/add_to_basket_form.html" %}
+                                                {% endwith %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        {% endif %}
+                    {% empty %}
+                    <p class="nonefound">{% trans "No products found." %}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="pagination-wrap">
+                    <!-- Bootstrap Pagination-->
+                    {% if paginator.num_pages > 1 %}
+                    <section class="text-right">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                      href="?{% get_parameters page %}page={{ page_obj.previous_page_number }}"
+                                      aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                <li class="page-item">
+                                    {% blocktrans with page_num=page_obj.number total_pages=paginator.num_pages %}
+                                    <a class="page-link" href="#">Page {{ page_num }} of {{ total_pages }}</a>
+                                    {% endblocktrans %}
+                                </li>
+                                {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                      href="?{% get_parameters page %}page={{ page_obj.next_page_number }}"
+                                      aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </section>
+                    {% endif %}
+                </div>
+              </div>
+            
+        </div>
+    </div>
+</section>
+
+<div class="snackbars" id="form-output-global"></div>
+<!--<script src="js/core.min.js"></script>-->
+<!--<script src="js/script.js"></script>-->
+{% endblock page-content %}
+
+{% block custombodyend %}
+<script>
+    $(document).ready(function(){
+        $("header").removeClass("header-creative-wrap");
+        $("header").removeClass("context-dark");
+
+        $('select').each(function(idx, elem){
+            $(elem).select2('destroy');
+        });
+        $('.variant-select').change(function(){
+            var retail_price = $(this).find('option:selected').data('retailPrice');
+            var selling_price = $(this).find('option:selected').data('sellingPrice');
+            var discount_price = $(this).find('option:selected').data('discount');
+            var product_id = $(this).val();
+            $(this).parents('.featured-product-card').find('.price-detail').text(retail_price);
+            $(this).parents('.featured-product-card').find('.selling-price').text(selling_price);
+            $(this).parents('.featured-product-card').find('.discount-price').text(`${discount_price}% off`);
+            $(this).parents('.featured-product-card').find('form.add-to-basket').get(0).action = `/basket/add/${product_id}/`;
+        });
+
+        $('.add-to-cart').click(function(e){
+            e.preventDefault()
+            var current_section = $(this).parents('.featured-product-card').get(0).id;
+            var cart_form = $(this).parent('form.add-to-basket').get(0);
+            cart_form.action = `${cart_form.action}#${current_section}`;
+            cart_form.submit()
+        });
+
+        $('#search-form').keyup(function(){
+            var searchKeyword = $(this).val();
+            if(searchKeyword.length >= 2){
+                $.ajax({
+                    url: `/catalogue/api/v1/product?query=${searchKeyword}`,
+                    type: "get",
+                    success: function(response) {
+                        if(response.results && response.results.length){
+                            $('#search-custom-data-list ul').html(``);
+                            for (obj in response.results){
+                                $('#search-custom-data-list ul').append(`
+                                    <li>
+                                        <a href="${response.results[obj]['detail_url']}">
+                                            <div class="result-container">
+                                                <div class="image-container">
+                                                    <img src="${response.results[obj]['image']}">
+                                                </div>
+                                                <div class="text-container">
+                                                    <h6 class="vendor-name">${response.results[obj]['title']}</h6>
+                                                    <p class="price">
+                                                        <i class="fa fa-rupee mr-1" aria-hidden="true"></i>
+                                                        <span>${response.results[obj]['selling_price']}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                `);
+                            }
+                            $('#search-custom-data-list').fadeIn();
+                        }
+                        else{
+                            $('#search-custom-data-list ul').html(`
+                                <li style="padding: 5px 10px;">
+                                    <span class="main-location">No Results Found</span>
+                                </li>
+                            `);
+                            $('#search-custom-data-list').fadeIn();
+                        }
+
+                    },
+                    error: function(error){
+                        console.log(error);
+                        $('#search-custom-data-list').fadeOut();
+                        $('#search-custom-data-list ul').html(`
+                            <li style="padding: 5px 10px;">
+                                <span class="main-location">No Results Found</span>
+                            </li>
+                        `);
+                    }
+                });
+            }
+            else{
+                $('#search-custom-data-list ').fadeOut();
+                $('#search-custom-data-list  ul').html(``);
+            }
+        });
+
+        $('#search-form').focusout(function(){
+             $('#search-custom-data-list').fadeOut();
+        });
+
+        $('#search-form').focusin(function(){
+            if($(this).val().length >= 2){
+                $('#search-custom-data-list').fadeIn();
+            }
+        });
+
+    });
+    $('#shop-list-filter-btn').click(function(){
+        $('#shop-list-filter').submit();
+    });
+    
+   
+
+</script>
+{% endblock %}

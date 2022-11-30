@@ -1,0 +1,1784 @@
+{% extends "website/frame.html" %}
+
+{% load staticfiles %}
+{% load image_tags %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load category_saperator %}
+{% load category_tags %}
+{% load basket_tags %}
+{% load display_tags %}
+{% load go_to_cart_product %}
+{% load i18n %}
+{% load arithmatic_ope %}
+
+{% block seo %}
+    <title>Natural Heart Health | Maximize Nutrition Intake Naturally | Instaeats</title>
+    <meta name="title" content="{{product.meta_title|default:''}}"/>
+    <meta name="description" content="{{product.meta_description|default:''}}"/>
+    <meta name="keywords" content="{% if product.meta_keywords %}{% for obj in product.meta_keywords %}{% if forloop.last %}{{ obj }}{% else %}{{obj}},{% endif %}{% endfor %}{% endif %}"/>
+
+{% endblock %}
+{% block customheadend %}
+
+<!--<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
+{% endblock %}
+
+{% block page-content %}
+<section class="breadcrumb">
+    <div class="container">
+        <div class="brdcmbx">
+            <div class="brd-d">
+                <h3>Health Store</h3>
+                <ul class="br_submenu">
+                    <li><a href="{{homepage_url}}">Home</a></li>                        
+                    <li>Health Store</li>
+                </ul>
+            </div>                                     
+        </div>
+    </div>
+</section>
+<section class="detail_bx">
+    <div class="container">
+        <div class="dtl_pgbx row">
+            <div class="dtl_slider col-6">    
+                <div class="dtl-bx">
+                    
+                    <div id="dtl_sldrm" class="owl-carousel owl-theme" data-items="1" data-swipe="true">
+                        {% with all_images=product.get_all_images %}
+                        {% for image in all_images %}
+                        <div class="item">
+                            <div class="dtlsldbx">
+                                {% with image=image.original %}
+                                    {% oscar_thumbnail image "546x546" upscale=True as thumb %}
+                                    <img class="prd_itm_img" src="{{thumb.url}}" data-image="{{thumb.url}}"
+                                    data-zoom-image="{{thumb.url}}" />
+                                    <!-- <a href="{{ product.get_absolute_url}}"></a> -->
+                                {%endwith%}
+                                <!-- <img src="{{ MEDIA_URL }}{{ image.original }}" alt=""/> -->
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endwith %}  
+                                           
+                    </div>
+                                        
+                </div>                    
+                
+            </div>
+            <div class="dtl_data col-6 featured-product-card">
+                <h1 class="dtl_ttl">{{ product.get_title|truncatechars:50 }}</h1>
+                <p class="dtl_tagline">({{ product.tagline|safe|striptags|truncatechars:50 }})</p>                
+                <div class="rating">
+                    <span class="ctryrpt with_star" style="color:orange">
+                        {% if product.product_rating == 1.0 %}
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                        {% elif product.product_rating == 2.0 %}
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                        {% elif product.product_rating == 3.0 %}
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                        {% elif product.product_rating == 4.0 %}
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-line"></i>
+                        {% elif product.product_rating == 5.0 %}
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        {% endif %}
+                    </span>
+                    <span class="cnt_vl">{%if product.product_rating_count %}{{product.product_rating_count}}{%endif%}</span>
+                </div>
+                <p class="dtl_dps">{{ product.description|safe|striptags }}</p>
+
+                <!-- <div class="line"></div> -->
+
+                <div class="pack_prsbx">
+                    <div class="pp_hdtl">
+                        <h1>Pricing</h1>
+
+                        <div>
+                            <a href="javascript:void(0);" id="unboxing-video" data-bs-toggle="modal" data-bs-target="#unbxkingmdl">Unboxing</a>
+                            <!-- <a href="{{product.unboxing_video_url}}">Unboxing</a> -->
+                        </div>
+                    </div>
+                    <ul class="pkul">
+                        {% for child in product.variants_list %}
+                      
+                        {% go_to_cart_product  product=product request=request.basket.all_lines as available %} 
+                       
+                        {% if not available.line and child == product.variants_list.0 %}
+                        
+                            <li class="ppckbx active" data-product="{{child.id}}" data-product-id="{{available.line.product.id}}" data-line-id="{{available.line.id}}" data-cart-id="{{request.basket.id}}">
+                              
+                                <i class="ri-checkbox-circle-fill"></i>
+                                <h3>{{child.title}}</h3>
+                                {% if child.title == "Pack of 6 Days"%}
+                                <p>6 Packets</p>
+                                {% elif child.title == "Pack of 15 Days"%}
+                                <p>15 Packets</p>
+                                {% elif child.title == "Pack of 30 Days"%}
+                                <p>30 Packets</p>
+                                {%endif%}
+                                <p>
+                                    <span>Expiry :</span>
+                                    <span>6 Month</span>
+                                </p>   
+                                <p>
+                                    <span>Weight :</span>
+                                    {% for av in child.attribute_values.all %}
+                                    <span>{{ av.value_as_html }}</span>
+                                    {% endfor %}
+                                </p>
+                                {% if child.stockrecords.first.price_excl_tax != child.stockrecords.first.price_retail %}
+                                    <h2>₹{{child.stockrecords.first.price_excl_tax}}</h2>
+                                    <p class="text-decoration-line-through">₹{{child.stockrecords.first.price_retail}}</p>
+                                {%else%}
+                                    <h2>₹{{child.stockrecords.first.price_excl_tax}}</h2>
+                                {%endif%}
+                                {% if child.percent_discount %}<p class="savdclr">Save {{child.percent_discount}}%</p>{%endif%}
+                            
+                                {% if child.title == "Pack of 6 Days"%}
+                                <p class="prpckt">₹{{child.stockrecords.first.price_excl_tax|div:6}} / Packet</p>
+                                <div class="ppbbtm">Recommended</div>
+                                {% elif child.title == "Pack of 15 Days"%}
+                                <p class="prpckt">₹{{child.stockrecords.first.price_excl_tax|div:15}} / Packet</p>
+                                <div class="ppbbtm">
+                                    <i class="ri-star-s-fill"></i>
+                                    Bestseller
+                                </div>
+                                {% elif child.title == "Pack of 30 Days"%}
+                                <p class="prpckt">₹{{child.stockrecords.first.price_excl_tax|div:30}} / Packet</p>
+                                <div class="ppbbtm">
+                                   
+                                    💰Big Saving
+                                   
+                                </div>
+                                {%endif%}
+                            </li>
+                        
+                        {%elif child.id == available.line.product.id %}
+                        <li class="ppckbx active" data-product="{{child.id}}" data-product-id="{{available.line.product.id}}" data-line-id="{{available.line.id}}" data-cart-id="{{request.basket.id}}">
+                            <i class="ri-checkbox-circle-fill"></i>
+                            <h3>{{child.title}}</h3>
+                            {% if child.title == "Pack of 6 Days"%}
+                            <p>6 Packets</p>
+                            {% elif child.title == "Pack of 15 Days"%}
+                            <p>15 Packets</p>
+                            {% elif child.title == "Pack of 30 Days"%}
+                            <p>30 Packets</p>
+                            {%endif%}
+                            <p>
+                                <span>Expiry :</span>
+                                <span>6 Month</span>
+                            </p>   
+                            <p>
+                                <span>Weight :</span>
+                                {% for av in child.attribute_values.all %}
+                                <span>{{ av.value_as_html }}</span>
+                                {% endfor %}
+                            </p>
+                            {% if child.stockrecords.first.price_excl_tax != child.stockrecords.first.price_retail %}
+                                <h2>₹{{child.stockrecords.first.price_excl_tax}}</h2>
+                                <p class="text-decoration-line-through">₹{{child.stockrecords.first.price_retail}}</p>
+                            {%else%}
+                            <h2>₹{{child.stockrecords.first.price_excl_tax}}</h2>
+                            {%endif%}
+                            {% if child.percent_discount %}<p class="savdclr">Save {{child.percent_discount}}%</p>{%endif%}
+                          
+                            {% if child.title == "Pack of 6 Days"%}
+                            <p class="prpckt">₹{{child.stockrecords.first.price_excl_tax|div:6}} / Packet</p>
+                            <div class="ppbbtm">Recommended</div>
+                            {% elif child.title == "Pack of 15 Days"%}
+                            <p class="prpckt">₹{{child.stockrecords.first.price_excl_tax|div:15}} / Packet</p>
+                            <div class="ppbbtm">
+                                <i class="ri-star-s-fill"></i>
+                                Bestseller
+                            </div>
+                            {% elif child.title == "Pack of 30 Days"%}
+                            <p class="prpckt">₹{{child.stockrecords.first.price_excl_tax|div:30}} / Packet</p>
+                            <div class="ppbbtm">
+                               
+                                💰Big Saving
+                               
+                            </div>
+                            {%endif%}
+                        </li>
+                        
+                        {%else %}
+                        <li class="ppckbx" data-product="{{child.id}}" data-product-id="{{available.line.product.id}}" data-line-id="{{available.line.id}}" data-cart-id="{{request.basket.id}}">
+                            <i class="ri-checkbox-circle-fill"></i>
+                            <h3>{{child.title}}</h3>
+                            {% if child.title == "Pack of 6 Days"%}
+
+                            <p>6 Packets</p>
+                            {% elif child.title == "Pack of 15 Days"%}
+                            <p>15 Packets</p>
+                            {% elif child.title == "Pack of 30 Days"%}
+                            <p>30 Packets</p>
+                            {%endif%}
+                            <p>
+                                <span>Expiry :</span>
+                                <span>6 Month</span>
+                            </p>   
+                            <p>
+                               
+                                <span>Weight :</span>
+                                {% for av in child.attribute_values.all %}
+                                <span>{{ av.value_as_html }}</span>
+                                {% endfor %}
+
+                            </p>
+                            <h2>₹{{child.stockrecords.first.price_excl_tax}}</h2>
+                            <p class="text-decoration-line-through">₹{{child.stockrecords.first.price_retail}}</p>
+                            {% if child.percent_discount %}<p class="savdclr">Save {{child.percent_discount}}%</p>{%endif%}
+                           
+
+                            {% if child.title == "Pack of 6 Days"%}
+                            <p class="prpckt">₹{{child.stockrecords.first.price_excl_tax|div:6}} / Packet</p>
+                            <div class="ppbbtm">Recommended</div>
+                            {% elif child.title == "Pack of 15 Days"%}
+                            <p class="prpckt">₹{{child.stockrecords.first.price_excl_tax|div:15}} / Packet</p>
+                            <div class="ppbbtm">
+                                <i class="ri-star-s-fill"></i>
+                                Bestseller
+                                
+                            </div>
+                            {% elif child.title == "Pack of 30 Days"%}
+                            <p class="prpckt">₹{{child.stockrecords.first.price_excl_tax|div:30}} / Packet</p>
+                            <div class="ppbbtm">
+                               
+                                💰Big Saving
+                            </div>
+                            {%endif%}
+                            
+                        </li>
+                        {%endif%}
+                        {%endfor%}
+                       </ul>
+                </div>
+
+
+                <div class="form-group d-none">
+                    {% go_to_cart_product  product=product request=request.basket.all_lines as available %} 
+                    <select class="form-control variant-select" data-line-id="{{available.line.id}}" data-cart-id="{{request.basket.id}}">
+                        {% for child in product.variants_list %}
+                            {% if child.title == available.basket_product %}
+                               <option value="{{child.id}}" data-discount="{{child.percent_discount}}" data-retail-price="{{child.stockrecords.first.price_retail}}" data-selling-price={{child.stockrecords.first.price_excl_tax}} selected>{{child.title}}</option>
+                            {%else%}
+                                <option value="{{child.id}}"  data-discount="{{child.percent_discount}}" data-retail-price="{{child.stockrecords.first.price_retail}}" data-selling-price={{child.stockrecords.first.price_excl_tax}}>{{child.title}}</option>
+                                        
+                            {%endif%}
+                        {% endfor %}  
+                        <!-- <Option>Select</Option>
+                        <option value="">6 Days Serving    |  Weight : 500 gm</option> -->
+                    </select>
+                </div>
+                <div class="price_bx d-none">
+                    {% if available.basket_product %}
+                            
+                        
+                        <h2 class="acprc selling-price">&#8377;{{available.line.unit_price_excl_tax}}
+                            <span  class="discount-price" style="color:red">Discount : {{available.line.product.percent_discount}}% </span>
+                        </h2>
+                        <h5 class="lssprs product-price product-price-old price-detail" >&#8377;{{available.line.stockrecord.price_retail}}</h5>
+                        
+                    {% else %}
+                                
+                    
+                    <h2 class="acprc selling-price">&#8377;{{product.variants_list.0.stockrecords.first.price_excl_tax}}
+                        <span  class="discount-price" style="color:red">Discount : {{product.variants_list.0.percent_discount}}% </span>
+                    </h2>
+                    <h5 class="lssprs product-price product-price-old price-detail" >&#8377;{{product.variants_list.0.stockrecords.first.price_retail}}</h5>
+                   
+                    {% endif %}
+                </div>
+                {% purchase_info_for_product request product as session %}
+
+                {% if session.availability.is_available_to_buy %}
+                <div class="button_bx mbl_btm">
+                    <a class="btn_fill go-to-cart-btn d-none" style="background-color:#38b245; border-color: #38b245;" href="{% url 'basket:summary' %}">                        
+                        Go To Cart
+                    </a>
+                   
+                    {% if available.status == True %}
+                    <a class="btn_fill go-to-cart-btn" style="background-color:#38b245; border-color: #38b245;" href="{% url 'basket:summary' %}">                        
+                        Go To Cart
+                    </a>
+                    <a class="btn_fill popup-add-to-cart-btn d-none" data-bs-toggle="offcanvas" data-bs-target="#cartmodal" aria-controls="offcanvasRight" href="javascript:void(0);">                        
+                        <span class="cart-loader-remove">Add To Basket</span>
+                        <i class="fa fa-circle-o-notch fa-spin cart-btn-loader d-none"></i>
+                        
+                    </a>
+
+                    {%else%}
+                    <a class="btn_fill popup-add-to-cart-btn" data-bs-toggle="offcanvas" data-bs-target="#cartmodal" aria-controls="offcanvasRight" href="javascript:void(0);">                        
+                        <span class="cart-loader-remove">Add To Basket</span>
+                        <i class="fa fa-circle-o-notch fa-spin cart-btn-loader d-none"></i>
+                        
+                    </a>
+
+                    {%endif%}
+                    <a class="btn_outline item-add-to-cart-btn" href="javascript:void(0);">Buy Now</a>
+                </div>
+                {%else%}
+                <div class="">
+                    {% if product.variants_list|length > 0 %}
+                        {% with product=product.variants_list.0 %}
+                            {% include "catalogue/partials/add_to_basket_form.html" %}
+                        {% endwith %}
+                        {% endif %}
+                </div>
+                {%endif%}
+            </div>
+        </div>
+
+        <div class="des_con">
+            <h4>Program Detail</h4>   
+            {% if product.program_detail %}         
+                <p>{{product.program_detail|safe|striptags}}</p>
+            {%endif%}
+        </div>
+
+        <div class="benefit_sec">
+
+            <div class="benefit-content sp_bg-1">
+                <h1>01</h1>
+                <div class="ttl_bc">
+                    <!-- <h3>BENEFITS</h3> -->
+                    <h3>SUPERFOOD </h3>
+                    <img class="img-fluid" src="{% static 'website/images/benefit.png' %}">
+                </div>
+                <p>{{product.benefits|safe|striptags}}</p>
+                <a data-bs-toggle="modal" data-bs-target="#benefitsmdl" href="javascript:void(0);">Read more</a>
+             </div>
+
+             <div class="benefit-content sp_bg-2">
+                <h1>02</h1>
+                <div class="ttl_bc">
+                    <!-- <h3>INGREDIENTS</h3> -->
+                    <h3>DIET PLAN</h3>
+                    <img class="img-fluid" src="{% static 'website/images/ingredient.png' %}">
+                </div>                              
+                <p>{{product.ingredients|safe|striptags}} </p>
+                <a data-bs-toggle="modal" data-bs-target="#ingredientsmdl"  href="javascript:void(0);">Read more</a>
+             </div>
+
+             <div class="benefit-content sp_bg-3">
+                <h1>03</h1>
+                <div class="ttl_bc">
+                    <!-- <h3>ADDITIONAL INFO</h3>     -->
+                    <h3>SUPPORT</h3>
+                    <img class="img-fluid" src="{% static 'website/images/add-info.png' %}">                
+                </div>
+                <p>{{product.additional_information|safe|striptags}}</p>                
+                <a data-bs-toggle="modal" data-bs-target="#additionalmdl" href="javascript:void(0);">Read more</a>
+             </div>
+
+        </div>
+
+        <div class="dtl_tab d-none">
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="dtl_dpsn" data-bs-toggle="tab" data-bs-target="#dtl_dpsnclick" type="button" role="tab" aria-controls="home" aria-selected="true">Description</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="dtl_bnfts" data-bs-toggle="tab" data-bs-target="#dtl_bnftsclick" type="button" role="tab" aria-controls="profile" aria-selected="false">Benefits</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="dtl_igrdts" data-bs-toggle="tab" data-bs-target="#dtl_igrdtsclick" type="button" role="tab" aria-controls="contact" aria-selected="false">Ingredients</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="dtl_adtninfo" data-bs-toggle="tab" data-bs-target="#dtl_adtninfoclick" type="button" role="tab" aria-controls="contact" aria-selected="false">Additional Informatin</button>
+                  </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade dtl_tabbx show active" id="dtl_dpsnclick" role="tabpanel" aria-labelledby="dtl_dpsn">
+                    <p>{{product.description|safe|striptags}}</p>
+                    <!-- <p>Munch it straight out of the packet, enjoy it along with a cup of green tea or add it to your favorite smoothie! keep a gap of 2 hours from any major meal. a perfect mid morning or evening power snack. consume instaeats heart health everyday along with a healthy diet for amazing health benefits!Munch it straight out of the packet, enjoy it along with a cup of green tea or add it to your favorite smoothie! keep a gap of 2 hours from any major meal. a perfect mid morning or evening power snack. consume instaeats heart health everyday along with a healthy diet for amazing health benefits!</p>
+                     <ul>
+                        <li>We are 100% wholegrain- certified by US Council</li>
+                        <li>The goodness of 100% naturally alkalised dark chocolate</li>
+                        <li>No added refined sugar, just raw honey and jaggery</li>
+                        <li>Baked for a crunchy texture</li>
+                        <li>No false promises or claims</li>
+                    </ul> --> 
+                </div>
+                <div class="tab-pane fade dtl_tabbx" id="dtl_bnftsclick" role="tabpanel" aria-labelledby="dtl_bnfts">
+                    <p>{{product.benefits|safe|striptags}}</p>
+                </div>
+                <div class="tab-pane fade dtl_tabbx" id="dtl_igrdtsclick" role="tabpanel" aria-labelledby="dtl_igrdts">
+                    <p>{{product.ingredients|safe|striptags}}</p>
+                </div>
+                <div class="tab-pane fade dtl_tabbx" id="dtl_adtninfoclick" role="tabpanel" aria-labelledby="dtl_adtninfo">
+                    <p>
+                        {{product.additional_information|safe|striptags}}
+                    </p>
+
+                        <!-- <p>Munch it straight out of the packet, enjoy it along with a cup of green tea or add it to your favorite smoothie! keep a gap of 2 hours from any major meal. a perfect mid morning or evening power snack. consume instaeats heart health everyday along with a healthy diet for amazing health benefits!Munch it straight out of the packet, enjoy it along with a cup of green tea or add it to your favorite smoothie! keep a gap of 2 hours from any major meal. a perfect mid morning or evening power snack. consume instaeats heart health everyday along with a healthy diet for amazing health benefits!</p>
+                    <ul>
+                        <li>We are 100% wholegrain- certified by US Council</li>
+                        <li>The goodness of 100% naturally alkalised dark chocolate</li>
+                        <li>No added refined sugar, just raw honey and jaggery</li>
+                        <li>Baked for a crunchy texture</li>
+                        <li>No false promises or claims</li> -->
+                    </ul>
+                </div>
+              </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="tdn_bx d-none">
+    <div class="container-fluid">
+    <div class="head_center">
+        <h3>Trusted by <br>
+            <span>Dietitians</span> and <span>Nutritionists</span>
+        </h3>
+        <p>
+            InstaEats Scientifically Formulated Products are 100% natural, Validated, Tested and Recommended by the Dietitian's and Nutritionists all over India.</p>
+    </div>
+    <div id="tdn_slider" class="owl-carousel">
+        {% for object in dietitions_and_nutritionists %}
+        <div class="item">
+            <div class="tdn_slbx">
+                <div class="med_img">
+                    <img src="{{MEDIA_URL}}{{object.image}}" alt="">
+                    <a class="btn_yt" href="{{object.url}}"><img src="{% static 'website/images/ic_yt.png' %}" loading="lazy"></a>
+                </div>
+                {% if object.description%}
+                <div class="data_txt">
+                    
+                    <h3>{{object.description|safe|striptags}}</h3>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {%endfor%}
+       
+    </div>
+   
+</div>            
+</section>
+
+
+<!-- 
+<section class="improve mv_whh">
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="imp_content">
+                    <h2>Why {{product.get_title|truncatechars:50}}</h2>
+                   
+                    
+                    <ul>
+                        {% if object.product_description %}
+                        <li>{{object.product_description|safe|striptags}}</li>
+                        {%endif%}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+            <div class="health_img text-center">
+                <h2>Why {{product.get_title|truncatechars:50}}</h2>
+                <img class="img-fluid" src="{{MEDIA_URL}}{{object.product_benefit_image}}">                
+            </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+<section class="cstm_reviews_wrapper mb-4">
+    <div class="container">
+
+
+        <div class="review_list">
+            <div class="head">
+                <div class="ttl_h">
+                    <h2 class="">Customers Story</h2>
+                </div>
+                <div class="ank_h">
+                    <a href="{% url 'website:review' %}">See all</a>
+                </div>
+            </div>
+ 
+
+
+            <div id="wcaoce" class="owl-carousel owl-theme">
+                {% for review in video_review %}
+                     <div class="cstmrvvdo">
+                        <a href="javascript:void(0);" class="cstmstoryclick" data-video-url="https://www.youtube.com/embed/{{review.video_id}}">
+                            <img class="ytbicon" loading="lazy" src="{% static 'website/images/ic_youtube.png' %}" alt="">
+                            <img src="https://img.youtube.com/vi/{{review.video_id}}/0.jpg" alt="">
+                        </a>                        
+                     </div>
+                {% endfor %} 
+            </div>
+
+
+            
+          
+            <ul class="border-0 justify-content-center nav nav-pills mb-3 mt-3 d-none" id="pills-tab" role="tablist"> 
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Video Reviews</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Verified Reviews</button>
+                </li>
+            </ul>
+
+            <div class="tab-content d-none" id="pills-tabContent">
+                <div class="tab-pane fade active show" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <div class="verify_review_wrapper newvrwbx dtlrvw">
+                        
+                        <div class="vrwbxdata">
+                            {% for review in product_review %}
+                            <div class="vrwrptr">
+                                <div class="verify_review_box">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="review_b_top">
+                                                <img class="img-fluid" src="{% static 'website/images/logo.png' %}" alt="">
+                                                <div class="verify_details">                                                    
+                                                    {% if review.user.name %}
+                                                    <h5 class="card-title">{{review.user.name}}</h5>
+                                                    {%else%}
+                                                    <h5 class="card-title">{{review.user_name}}</h5>                                                    
+                                                    {% endif %}
+                                                    <div class="verify_rating">
+                                                        <div class="review">
+                                                            <i class="ri-star-s-fill"></i>
+                                                            <i class="ri-star-s-fill"></i>
+                                                            <i class="ri-star-s-fill"></i>
+                                                            <i class="ri-star-s-fill"></i>
+                                                            <i class="ri-star-half-fill"></i>  
+                                                        </div>
+                                                        <div class="rating_date">
+                                                            {{review.created_on}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+    
+                                            </div>
+    
+                                            <div class="review_verify_text">
+                                                <!-- <span>Nice</span> -->
+                                                <p>{{review.review|safe|striptags}}</p>
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            {%endfor%}
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <div class="video_review_wrapper">
+                        <div class="vrw_bx">
+                            {% for review in video_review %}
+                            <div class="vrw_rptr">
+                                <div class="verify_review_box">
+                                    <iframe class="lazy" data-src="https://www.youtube.com/embed/{{review.video_id}}"
+                                        title="YouTube video player" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>    
+            </div>  
+
+
+        </div>
+
+
+    </div>
+</section>
+
+
+{% if object.product_banner_image %}
+<section class="consumer_wrapper">
+    <div class="consumer_sec text-center">
+        <!-- style="background: url('{{MEDIA_URL}}{{object.product_banner_image}}');" -->
+        <!-- <img src="{{MEDIA_URL}}{{object.product_banner_image}}" alt="">  -->
+
+        <img class="img-fluid lazy" data-src="{{MEDIA_URL}}{{object.product_banner_image}}" alt="">
+        
+        <div class="container" style="display: none;">
+            <h2>Your Heart Health Is Inportant</h2>
+            <p>Don't risk your health. Save your heart before it's too late!</p>
+
+            <!-- <img src="{{MEDIA_URL}}{{object.product_banner_image}}" alt=""> -->
+
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="consumer_con">
+                        
+                        <span>32%</span>
+                        <p>Cardiovascular diseases are responsible for an estimated 32% of deaths worldwide.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="consumer_con">
+                        
+                        <span>45%</span>
+                        <p>High blood pressure is the most prevalent heart disease as 45% of the population has hypertension.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="consumer_con">
+                        
+                        <span>20%</span>
+                        <p>About 1 in 5 heart attacks are silent—the damage is done, but the person is unaware of it.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%endif%}
+
+
+<section class="improve mv_whh">
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-lg-6 wwhim">
+                <div class="imp_content">
+                    <h2>Why {{product.get_title|truncatechars:50}}?</h2>
+                    <!-- <h2>Improve your Heart Health naturally</h2> -->
+                    <!-- <h4>BENEFITS </h4> -->
+                    
+                    <ul>
+                        {% if object.product_description %}
+                        <li>{{object.product_description|safe|striptags}}</li>
+                        {%endif%}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+            <div class="health_img text-center">
+                <h2>Why {{product.get_title|truncatechars:50}}</h2>
+                <img class="img-fluid lazy" data-src="{{MEDIA_URL}}{{object.product_benefit_image}}">                
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% if dietitions_and_nutritionists %}
+<section class="doctor_advice review_list">
+
+    <div class="container">
+        <div class="head">
+            <div class="ttl_h">
+                <h2 class="">Dietician's Advice</h2>
+            </div>
+            <div class="ank_h">
+                <a href="{% url 'catalogue:dietitian_advice_list' %}">See all</a>
+            </div>
+        </div>
+
+          
+
+            <div id="detcanadvice" class="row dctradv_bx_m owl-carousel">
+
+
+                {%for object in dietitions_and_nutritionists %}
+                {% if forloop.counter < 4 %}
+                    <div class="col-md-4 drcbx cstmrvvdo">
+                        <a href="javascript:void(0);" class="cstmstoryclick" data-video-url="https://www.youtube.com/embed/{{object.video_id}}">
+                            <img class="ytbicon" loading="lazy" src="{% static 'website/images/ic_youtube.png' %}" alt="">
+                            <img class="dtcnimg" src="https://img.youtube.com/vi/{{object.video_id}}/0.jpg" alt="">
+                        </a>                        
+                    </div>   
+                    {%endif%}                 
+                {% endfor %}                 
+
+                <!-- {%for object in dietitions_and_nutritionists %}
+                <div class="col-md-4 drcbx">
+                    <div class="video_advice_box">
+                        <iframe src="https://www.youtube.com/embed/{{object.video_id}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+                   </div>
+                </div>
+                {%endfor%} -->
+
+
+            </div>
+        </div>
+    </section>
+
+{%endif%}
+
+{% if product_faqs %}
+<section class="dtl_faqsection">
+    <div class="container">
+        <div class="faq-accordian">
+
+            <div class="head">
+                <h1 class="">Faq's</h1>
+                <!-- <h2> Let us Help You With Your Queries</h2> -->
+            </div>
+            
+            
+
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                {% for faq in product_faqs %}
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="flush-heading{{faq.id}}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{faq.id}}" aria-expanded="false" aria-controls="flush-collapse{{faq.id}}">
+                       {{faq.question|safe|striptags}}
+                        <span class="arrouw-btn"></span>
+                    </button>
+                  </h2>
+                  <div id="flush-collapse{{faq.id}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{faq.id}}" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">{{faq.answer|safe|striptags}}</div>
+                  </div>
+                </div>
+                {%endfor%}
+              
+              </div>
+        </div>
+    </div>
+</section>
+{%endif%}
+
+
+<!-- 
+<section class="dtl_faqsection">
+    <div class="container">
+        <div class="faq-accordian">
+
+            <div class="head">
+                <h1 class="">Faq's</h1>
+                <h2> Let us Help You With Your Queries</h2>
+            </div>
+            
+            
+
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                {% for faq in product_faqs %}
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="flush-heading{{faq.id}}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{faq.id}}" aria-expanded="false" aria-controls="flush-collapse{{faq.id}}">
+                       {{faq.question|safe|striptags}}
+                        <span class="arrouw-btn"></span>
+                    </button>
+                  </h2>
+                  <div id="flush-collapse{{faq.id}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{faq.id}}" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">{{faq.answer|safe|striptags}}</div>
+                  </div>
+                </div>
+                {%endfor%}
+                 
+              </div>
+        </div>
+    </div>
+</section> -->
+
+{% with recommended_products=product.sorted_recommended_products|slice:":6" %}
+
+{% if recommended_products %}
+<section class="dssfmp_bx">
+    <div class="container">
+        <div class="head">
+            <div class="hd_ttl">
+                <h3>Similar Products</h3>
+            </div>
+            <!-- <div class="hd_linkbtn">
+                <select class="form-control">
+                    <option value="">Select</option>
+                    <option>6 Days Serving</option>
+                </select>
+            </div> -->
+        </div>
+        <div id="dssfmpslider" class="owl-carousel cstm_slider_ecom">
+            
+            {% for product in recommended_products %}
+            <div class="reptrbx" id="featured-product-{{product.id}}">                
+                <!-- <div class="prdtophd">
+                    <h3><a href="{{ product.get_absolute_url}}">{{product.product_title}}</a></h3>
+                    <p>{{product.product_tagline}}</p>
+                </div> -->
+                <div class="prdt featured-product-card">  
+                    
+                    <div class="imgbdrbx">
+                   
+                        <div class="m_dea">
+                            {% with image=product.primary_image %}
+                                {% oscar_thumbnail image.original "255x255" upscale=True as thumb %}
+                                <a href="{{ product.get_absolute_url}}"><img class="prd_itm_img" src="{{thumb.url}}" loading="lazy" data-image="{{thumb.url}}"
+                                data-zoom-image="{{thumb.url}}" /></a>
+                            {%endwith%}
+                            <!-- <a href="{{ product.get_absolute_url}}"><img class="prd_itm_img lazy" data-src="{{MEDIA_URL}}{{product.primary_image.original}}" alt=""></a> -->
+                        </div>
+                        <!-- <a href="{{ product.get_absolute_url}}"><img class="prd_itm_img lazy" data-src="{{MEDIA_URL}}{{product.primary_image.original}}" alt=""></a> -->
+                  
+                    <div class="data_bx">
+                        <h1><a href="{{ product.get_absolute_url}}">{{product.title|truncatechars:35}}</a></h1>
+                        <!-- <p>{{product.description|safe|striptags|truncatechars:35}}</p> -->
+                        <p>({{ product.tagline|safe|striptags|truncatechars:40 }})</p>
+                        {% go_to_cart_product  product=product request=request.basket.all_lines as available %} 
+                        {% if available.basket_product %}
+                            {% if available.line.product.percent_discount > 0 %}
+                                <div class="discount_percent">
+                                    <span class="pts discount-price">{{available.line.product.percent_discount}}%</span>
+                                    <span class="oft">off</span>
+                                
+                                </div>
+                            {%endif%}
+                        {%else%}
+                            {% if product.variants_list.0.percent_discount > 0 %}
+                                <div class="discount_percent">
+                                    <span class="pts discount-price">{{product.variants_list.0.percent_discount}}%</span>
+                                    <span class="oft">off</span>
+                                </div>
+                            {%endif%}
+                        {%endif%}
+
+
+                        <div class="star_bx">
+                            <span class="str_img">
+                                <span class="ctryrpt with_star" style="color:orange">
+                                    {% if product.product_rating == 1.0 %}
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-line"></i>
+                                        <i class="ri-star-line"></i>
+                                        <i class="ri-star-line"></i>
+                                        <i class="ri-star-line"></i>
+                                    {% elif product.product_rating == 2.0 %}
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-line"></i>
+                                        <i class="ri-star-line"></i>
+                                        <i class="ri-star-line"></i>
+                                    {% elif product.product_rating == 3.0 %}
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-line"></i>
+                                        <i class="ri-star-line"></i>
+                                    {% elif product.product_rating == 4.0 %}
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-line"></i>
+                                    {% elif product.product_rating == 5.0 %}
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    {% endif %}
+                                </span>
+                            </span>
+                            <span class="cnt_vl">{%if product.product_rating_count%}{{product.product_rating_count}}{%endif%}</span>
+                        </div>
+
+                        <div class="bnyftul">
+                            <ul class="bnyftlst">
+                                <li>{{product.product_benefit_1}}</li>
+                                <li>{{product.product_benefit_2}}</li>
+                            </ul>
+                        </div>
+
+
+
+                        <div class="dt_slctor">
+                            {% go_to_cart_product  product=product request=request.basket.all_lines as available %} 
+                            <select class="form-control  variant-selectt" data-line-id="{{available.line.id}}" data-cart-id="{{request.basket.id}}">
+                                {% for child in product.variants_list %}
+                                    {% if child.title == available.basket_product %}
+                                        <option value="{{child.id}}" class="ppckbx active"  data-discount="{{child.percent_discount}}" data-retail-price="{{child.stockrecords.first.price_retail}}" data-selling-price={{child.stockrecords.first.price_excl_tax}} selected>{{child.title}}</option>
+                                    {%else%}
+                                        <option value="{{child.id}}" class="ppckbx active" data-description="{{child.additional_information|safe|striptags|truncatechars:50}}" data-discount="{{child.percent_discount}}" data-retail-price="{{child.stockrecords.first.price_retail}}" data-selling-price={{child.stockrecords.first.price_excl_tax}}>{{child.title}}</option>
+                                    
+                                    {%endif%}
+                                {% endfor %}  
+                            </select>
+                        </div>
+                    
+                
+                        <div class="price_bx">
+                            {% if available.basket_product %}
+                                {% if available.line.stockrecord.price_retail != available.line.unit_price_excl_tax %}
+                                    <h2 class="lssprs product-price product-price-old price-detail">&#8377;{{available.line.stockrecord.price_retail}}</h2>
+                                    <h2 class="acprc selling-price">&#8377;{{available.line.unit_price_excl_tax}}</h2>
+                                {%else%}
+                                <h2 class="acprc selling-price">&#8377;{{available.line.unit_price_excl_tax}}</h2>
+                                {%endif%}
+                            
+                            {% else %}
+                            
+                                {% if product.variants_list.0.stockrecords.first.price_retail != product.variants_list.0.stockrecords.first.price_excl_tax %}
+                                    <h2 class="lssprs product-price product-price-old price-detail">&#8377;{{product.variants_list.0.stockrecords.first.price_retail}}</h2>
+                                    <h2 class="acprc selling-price">&#8377;{{product.variants_list.0.stockrecords.first.price_excl_tax}}</h2>
+                                {%else%}
+                                    <h2 class="acprc selling-price">&#8377;{{product.variants_list.0.stockrecords.first.price_excl_tax}}</h2>
+                                {%endif%}
+                            
+                                    
+                            {% endif %}
+
+                        </div>
+
+                        <div class="freedlrybx">
+                            <p><span><img src="{% static 'website/images/ic_check.png' %}" alt="about"></span> FREE Prime Delivery</p>
+                        </div>
+
+                        {% purchase_info_for_product request product as session %}
+
+                        {% if session.availability.is_available_to_buy %}
+                        
+                            <div class="btn_crtby">
+                                <a class="btn btn_fill go-to-cart-btn flex-btnndn d-none"  href="{% url 'basket:summary' %}" style="background-color:#38b245;border-color: #38b245;">
+                                    <!-- <span class="m_icon"><i class="ri-shopping-cart-2-line"></i></span> Go To Cart -->
+                                    <span class="m_icon ic_checki">
+                                        <i class="ri-check-fill"></i>                                                    
+                                    </span> Added
+                                </a>
+                            
+                            
+                                {% if available.status == True %}
+                                <a class="btn_fill go-to-cart-btn flex-btnndn" href="{% url 'basket:summary' %}" style="background-color:#38b245;border-color: #38b245;">
+                                    <!-- <span class="m_icon"><i class="ri-shopping-cart-2-fill"></i></span> Go To Cart -->
+                                    <span class="m_icon ic_checki">
+                                        <i class="ri-check-fill"></i>                                                    
+                                    </span> Added
+                                </a>
+
+                                <a class="btn_fill popup-add-to-cart-btnn d-none"  id=" popup-add-to-cart" data-bs-toggle="offcanvas" data-bs-target="#cartmodal" aria-controls="offcanvasRight" href="javascript:void(0);">
+                                    <span class="m_icon"><i class="ri-shopping-cart-2-fill"></i>
+                                
+                                </span>
+                                <span class="cart-loader-remove">Add To Cart</span>
+                                    <i class="fa fa-circle-o-notch fa-spin cart-btn-loader d-none"></i>
+                                </a>    
+                                {%else%}
+                            
+                                <a class="btn_fill popup-add-to-cart-btnn"  id=" popup-add-to-cart" data-bs-toggle="offcanvas" data-bs-target="#cartmodal" aria-controls="offcanvasRight" href="javascript:void(0);">
+                                    <span class="m_icon"><i class="ri-shopping-cart-2-fill"></i>
+                                </span>
+                                <span class="cart-loader-remove">Add To Cart</span>
+                                    <i class="fa fa-circle-o-notch fa-spin cart-btn-loader d-none"></i>
+                                </a>
+                                {%endif%}
+                                <a class="btn_outline item-add-to-cart-btnn" href="javascript:void(0);">Buy Now</a>
+                            </div>
+                        {%else%}
+                        
+                            <div>
+                                {% if product.variants_list|length > 0 %}
+                                {% with product=product.variants_list.0 %}
+                                    {% include "catalogue/partials/add_to_basket_form.html" %}
+                                {% endwith %}
+                                {% endif %}                                
+                            </div>   
+                        {%endif%}
+                                    
+
+                    </div>
+                 </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endwith %}
+<!-- <section class="meet_section">
+    <div class="container">
+        <div class="head">
+            <h3>Meet Our Followers</h3>
+        </div>
+        
+        <div id="mofsldr" class="owl-carousel">
+            {% for object in followers %}
+            <div class="item">
+                <div class="mof_slbx">
+                    <div class="med_img">
+                        <img src="{{MEDIA_URL}}{{object.image}}" alt=""> 
+                        <a class="mof_vdbtn" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#videomdl"><img class="img-fluid" src="{% static 'website/images/ic_yt.png' %}"></a>                                   
+                    </div>                                
+                </div>
+            </div>
+            {%endfor%}
+       
+            
+        </div>                
+    </div>
+</section> -->
+
+
+<section class="wcaocet_section d-none">
+    <div class="container-fluid">
+        <div class="head-cn">
+            <h3>We Care About Our Customers Experience Too</h3>
+        </div>
+        <div id="wca_owl" class="owl-carousel">
+            {% for obj in customer_testimonial_list %}
+            <div class="item">
+                <div class="wcace_b">
+                    <h3 class="ht_ttl"><b>{{obj.review|safe|striptags}}</b></h3>
+                    <img class="usr_icni" src="{{ MEDIA_URL }}{{ obj.customer_image }}" alt="">
+                    <h4>{{ obj.name }}</h4>
+                    <p>{{obj.city}}</p>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</section>
+
+
+<section class="nswihlhc d-none">
+    <div class="container">
+        <div class="constnw">
+            <div class="constbx">
+                <h1>Not sure which is the right plan for you? Get instant help from a leading health coach.</h1>
+                <a class="btn_fl" href="{% url 'website:contact_us' %}">Consult Now</a>
+            </div>
+            <div class="mda_img">
+                <img src="{% static 'website/images/img_4.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="snackbars" id="form-output-global"></div>
+
+<!--<script src="js/core.min.js"></script>-->
+<!--<script src="js/script.js"></script>-->
+
+<!-- Modal -->
+
+<!-- ttps://www.youtube.com/embed/{{object.video_id}} -->
+ 
+  <div class="modal fade csmtvideomdl" id="unbxkingmdl" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">          
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-fill"></i></button>
+        </div>
+        <div class="modal-body">
+            <iframe class="ifrmvideo" id="playerID" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div> 
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal fade csmtvideomdl" id="CustomersStory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">          
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-fill"></i></button>
+        </div>
+        <div class="modal-body customer-story-frame ">
+            <iframe class="ifrmvideo youtube-video " id="playerIDD" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+           
+
+        </div> 
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+<div class="modal fade csmtvideomdl" id="videomdl" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">          
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-fill"></i></button>
+        </div>
+        <div class="modal-body">
+            <!-- <iframe class="ifrmvideo" id="playerID" src="https://www.youtube.com/embed/gcRcVVfm8I4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+        </div>
+ 
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal -->
+<div class="modal fade mdlcstmmdl" id="benefitsmdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">SUPERFOOD</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            
+            {{product.benefits|safe}}
+        </div>       
+      </div>
+    </div>
+  </div>
+
+<div class="modal fade mdlcstmmdl" id="ingredientsmdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">DIET PLAN</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        {{product.ingredients|safe}} 
+    </div>       
+    </div>
+</div>
+</div>
+
+<div class="modal fade mdlcstmmdl" id="additionalmdl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">SUPPORT</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            {{product.additional_information|safe}} 
+        </div>       
+        </div>
+    </div>
+</div>
+
+<div class="AFyd3c add_message_pop" id="success-adcrtmdl">
+    <div class="_1EA4La" id="popup-success-message">
+        <div class="_1-baVo">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMjAnIGhlaWdodD0nMjAnIHZpZXdCb3g9JzAgMCAyMCAyMCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz4KCTxnPgoJCTxwYXRoIGQ9J00tMi0yaDI0djI0SC0yeicgZmlsbD0nbm9uZScvPgoJCTxwYXRoIGQ9J00xMCAwQzQuNDggMCAwIDQuNDggMCAxMHM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTUuNTIgMCAxMCAwek04IDE1bC01LTUgMS40MS0xLjQxTDggMTIuMTdsNy41OS03LjU5TDE3IDZsLTkgOXonIGZpbGw9JyMyNkJDNEUnLz4KCTwvZz4KPC9zdmc+Cg==" class="_2P4x_N lazy">
+        </div>
+        <div class="JAUzCh"><span id="added-product_name"> </span> &nbsp Item Added Successfully.</div>
+        <div class="_2BPjzq">
+            <a href="{% url 'basket:summary' %}" class="_2AkmmA VID7GA">Go To Cart</a>            
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+<div class="modal fade"  id="adcrtmdl"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">      
+        <div class="modal-body" id="popup-message-text">
+            {% for message in messages %}
+            {% if 'safe' in message.tags %}
+            
+                {{ message|safe }}  
+            
+            {% else %}
+
+                {{ message }} 
+
+            {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+</div>
+  {% else %}
+  <div class="modal fade"  id="adcrtmdl"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">      
+        <div class="modal-body" id="popup-message-text">
+            {% for message in messages %}
+            {% if 'safe' in message.tags %}
+            
+                {{ message|safe }}
+            
+            {% else %}
+
+                {{ message }}
+
+            {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{%endif%}
+
+
+{% endblock page-content %}
+
+{% block custombodyend %}
+<script>
+
+
+
+ 
+$(window).scroll(function() {  
+    
+  
+    if ($(window).width() <=980 ) {
+
+        var owl = $('#detcanadvice');
+        owl.owlCarousel({
+            margin: 0,
+            items: 1,
+            loop: false,
+            dots: true,
+            Touch:true,   
+        });
+
+        var scroll = $(window).scrollTop();
+        // if (scroll >= 0) {                
+        //     $(".button_bx").addClass("mbl_btm");
+        //     $("body").addClass("bp_80");
+        // } else {                
+        //     $(".button_bx").removeClass("mbl_btm");
+        //     $("body").removeClass("bp_80");
+        // }
+    }
+});
+
+    $(document).ready(function(){
+
+
+        $('.cstmstoryclick').click(function(){
+            var videoUrl = $(this).data('videoUrl');
+            $('#playerIDD').attr('src', videoUrl);
+            $('#CustomersStory').modal('show');
+        });                      
+        var hideDietitions = document.getElementById('CustomersStory');        
+        if (hideDietitions){
+            hideDietitions.addEventListener('hidden.bs.modal', function (event) {                
+                $('#playerIDD').attr('src', "");
+            });
+        };
+
+        $('#unboxing-video').click(function(){
+           
+            var video = "https://www.youtube.com/embed/"+'{{object.video_id}}'
+            console.log(video)
+            $('#playerID').attr('src', video);
+            $('#unbxkingmdl').modal('show');
+        });                      
+        
+      
+
+    $('.btn-close').click(function() {
+        var srcvideoUrl= $('#playerID').get(0).src;
+        $('#playerID').get(0).src='';
+        $('#playerID').get(0).src=srcvideoUrl;        
+    });
+
+        var addToCartErrorPopup = new bootstrap.Modal(document.getElementById('adcrtmdl'), {})
+        var addToCartSuccessPopup = new $(this).data(document.getElementById('success-adcrtmdl'))
+       
+        $('#wcaoce').owlCarousel({
+            loop:false,
+            margin:10,
+            nav:true,
+            dots: true,
+            navText : ["<i class='ri-arrow-left-s-line'></i>","<i class='ri-arrow-right-s-line'></i>"],
+            responsive:{
+                0:{
+                    items:1
+                },
+                600:{
+                    items:2
+                },
+                1000:{
+                    items:3
+                },
+                // 1600:{
+                //     items:4.5
+                // }
+            }
+})
+
+
+        $("header").removeClass("header-creative-wrap");
+        $("header").removeClass("context-dark");
+
+        $('a#closepopup').click(function () {
+            $('add-popup').slideUp('slow');
+        });
+
+        // fetchBasketDetail = function(){
+        //     $.ajax({
+        //         url: "/catalogue/basket-item-detail",
+        //         type: "get",
+        //         headers: {
+        //             'X-CSRFToken': '{{csrf_token}}'
+        //         },
+        //         success: function (response) {
+        //             // console.log(response);
+        //             var text = document.getElementById("shopping-cart-len").innerHTML;
+        //             // console.log(text)
+        //             // text = Number(text) + 1;
+        //             document.getElementById("popup_cart_len").innerHTML = text;
+        //             $('#line-list-container').html('');
+        //             $('#line-list-container').html(response);  
+        //         },
+        //         error: function (error) {
+        //             console.error(error);
+        //         },
+        //     });
+        // }
+        // fetchBasketDetail();
+
+        // $('body').on('click', '.popup-delete-btn', function(){
+        //     var lineId = $(this).data('lineId');
+        //     var cartId = $(this).data('cartId');
+        //     var deleteURL = `${location.origin}/api/baskets/${cartId}/lines/${lineId}/`;
+        //     $.ajax({
+        //         url: deleteURL,
+        //         type: "delete",
+        //         headers: {
+        //             'X-CSRFToken': '{{csrf_token}}'
+        //         },
+        //         success: function (response) {
+        //             console.log(response);
+        //             fetchBasketDetail();
+        //             location.reload()
+        //         },
+        //         error: function (error) {
+        //             console.error(error);
+        //         },
+        //     });
+        // });
+
+        $('.popup-add-to-cart-btn').click(function(){
+                var addToCartApiUrl = `${location.origin}/api/basket/add-product/`;
+               
+                if ($(this).parents('.featured-product-card').find('.ppckbx').hasClass('active') ) {  
+                    var productId = $(this).parents('.featured-product-card').find('.active').data('product');
+                }
+                else{
+                    var productId = $(this).parents('.featured-product-card').find('.variant-selectt').val();
+                }
+                console.log(productId);
+                var current_button = $(this);
+                $(current_button).find('.cart-btn-loader').removeClass('d-none');
+                $(current_button).find('.cart-loader-remove').addClass('d-none');
+                var productApiUrl = `${location.origin}/api/products/${productId}/`;
+                var quantity = 1;
+                $.ajax({
+                    url: addToCartApiUrl,
+                    type: "post",
+                    headers: {
+                        'X-CSRFToken': '{{csrf_token}}'
+                    },
+                    data: JSON.stringify({
+                        "url": productApiUrl,
+                        "quantity": quantity,
+                    }),
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response);
+                       
+                        var text = document.getElementById("shopping-cart-len").innerHTML;
+                        console.log(text)
+                        text = Number(text) + 1;
+                        $('.nav-small-cart').find('#shopping-cart-length').text(String(text))
+                        $('.nav-small-cart-btn').find('#shopping-cart-len').text(String(text))
+                        document.getElementById("shopping-cart-len").innerHTML = text;
+                        $("#shopping-cart-length").removeClass('d-none');
+                        console.log(document.getElementById("shopping-cart-len").innerHTML)
+                        $("#shopping-cart-len").removeClass('d-none');
+                        // var text = document.getElementById("shopping-cart-len").innerHTML;
+                        // console.log(text)
+                        // text = Number(text) + 1;
+                        // $('#shopping-cart-len').text(text);
+                        // console.log('#shopping-cart-len')
+                        // document.getElementById("shopping-cart-len").innerHTML = text;
+                        // $("#shopping-cart-len").removeClass('d-none');
+                        $(current_button).find('.cart-btn-loader').addClass('d-none');
+                        $(current_button).find('.cart-loader-remove').removeClass('d-none');
+                        $(current_button).parents('.featured-product-card').find('.popup-add-to-cart-btn').addClass('d-none');
+                        $(current_button).parents('.featured-product-card').find('.go-to-cart-btn').removeClass('d-none');
+                        $("#success-adcrtmdl").addClass("active")
+                        addToCartSuccessPopup.show();
+
+                        setTimeout(function(){                                
+                            $("#success-adcrtmdl").removeClass("active");
+                            addToCartSuccessPopup.hide();
+                        },2500); 
+                        // if (window.innerWidth <= 480){
+                        //     $('#popup-message-text').text('Product Added in Your Cart');
+                        //     // $('#staticBackdrop').modal('show');
+                        // }
+                        // else{
+                        //     fetchBasketDetail();
+                        //     $('.add-popup').slideDown('slow');
+                        // }
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        $(current_button).find('.cart-btn-loader').addClass('d-none');
+                        $(current_button).find('.cart-loader-remove').removeClass('d-none');
+
+                        if (error.responseJSON.reason){
+                                
+                                $('#popup-message-text').text(error.responseJSON.reason);
+                             
+                            }
+                            else{
+                            
+                                $('#popup-message-text').text('You cannot add this product');
+                               
+                            }
+
+                        addToCartErrorPopup.show()
+                        setTimeout(function(){
+                            addToCartErrorPopup.hide()
+                        },2000);
+                        // if (error.responseJSON.reason){
+                        //     $('#popup-message-text').text(error.responseJSON.reason);
+                        //     // $('#staticBackdrop').modal('show');
+                        // }
+                        // else{
+                        //     $('#popup-message-text').text('You cannot add this product');
+                        //     // $('#staticBackdrop').modal('show');
+                        // }
+                    },
+                });
+            });
+
+            $('.item-add-to-cart-btn').click(function(){
+                var addToCartApiUrl = `${location.origin}/api/basket/add-product/`;
+                if ($(this).parents('.featured-product-card').find('.ppckbx').hasClass('active') ) {  
+                    var productId = $(this).parents('.featured-product-card').find('.active').data('product');
+                }
+                // var productId = $(this).parents('.featured-product-card').find('.variant-select').val();
+                var productApiUrl = `${location.origin}/api/products/${productId}/`;
+                var quantity = 1;
+                $.ajax({
+                    url: addToCartApiUrl,
+                    type: "post",
+                    headers: {
+                        'X-CSRFToken': '{{csrf_token}}'
+                    },
+                    data: JSON.stringify({
+                        "url": productApiUrl,
+                        "quantity": quantity,
+                    }),
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response);
+                        location.href = `${location.origin}/basket`
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        if (error.responseJSON.reason){
+                            $('#popup-message-text').text(error.responseJSON.reason);
+                            
+                        }
+                        else{
+                            $('#popup-message-text').text('You cannot add this product');
+                            
+                        }
+                    },
+                });
+            });
+        
+
+        
+    $('.variant-selectt').change(function(){
+            var retail_price = $(this).find('option:selected').data('retailPrice');
+            // console.log(retail_price)
+            var selling_price = $(this).find('option:selected').data('sellingPrice');
+            var discount_price = $(this).find('option:selected').data('discount');
+            var product_id = $(this).val();
+            $(this).parents('.featured-product-card').find('.price-detail').text(retail_price);
+            $(this).parents('.featured-product-card').find('.selling-price').text(selling_price);
+            $(this).parents('.featured-product-card').find('.discount-price').text(`${discount_price}%`);
+            // $(this).parents('.featured-product-card').find('form.add-to-basket').get(0).action = `/basket/add/${product_id}/`;
+            var productId = $(this).val();
+            var cartId = $(this).data('cartId');
+            var lineId = $(this).data('lineId')
+            RemoveBasketProduct(lineId,cartId,productId);
+    });
+
+    RemoveBasketProduct = function(lineId, cartId, productId){
+            //var lineId = $(this).parents('.featured-product-card').find('.variant-select').val();
+
+            var deleteURL = `${location.origin}/api/baskets/${cartId}/lines/${lineId}/`;
+            $.ajax({
+                url: deleteURL,
+                type: "delete",
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}'
+                },
+                success: function (response) {
+                    console.log(response);
+                   
+                    ProductAdd(productId, lineId);
+                },
+                error: function (error) {
+                    console.error(error);
+                },
+            });
+        }
+
+        ProductAdd = function(productId, lineId){
+            var addToCartApiUrl = `${location.origin}/api/basket/add-product/`;
+            // var productId = $(this).parents('.featured-product-card').find('.variant-select').val();
+            console.log(productId);
+            var productApiUrl = `${location.origin}/api/products/${productId}/`;
+            var quantity = 1;
+            $.ajax({
+                url: addToCartApiUrl,
+                type: "post",
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}'
+                },
+                data: JSON.stringify({
+                    "url": productApiUrl,
+                    "quantity": quantity,
+                }),
+                contentType: "application/json",
+                success: function (response) {
+                    lineId=lineId+1;
+                    $('.ppckbx').data('lineId', lineId)
+                    
+                    console.log(response);
+
+                    // location.reload()
+                },
+                error: function (error) {
+                    console.error(error);
+                  
+                },
+            });
+        }
+
+
+
+    $('#product_quantity').on('change keyup', function(){
+        $('#id_quantity').val($(this).val());
+    });
+
+    // $('.add_product_item_in_cart').click(function(e){
+    //     $(this).parents('.featured-product-card').find('form.add-to-basket').get(0).submit();
+        
+    // });
+
+
+        $('.pkul li.ppckbx').click( function(){
+           
+            // if ( $(this).hasClass('active') ) {                
+            //     $(this).removeClass('active');
+            // } else {                
+            $('li.active').removeClass('active');
+            $(this).addClass('active');    
+            // }
+         
+            var product_id = $(this).data('product');
+            var productId =  $(this).data('productId');
+            console.log(productId)
+            var cartId = $(this).data('cartId');
+            console.log(cartId)
+            var lineId = $(this).data('lineId')
+            console.log(lineId)
+            RemoveBasketProduct(lineId,cartId,product_id);
+        });
+        
+
+        $("#dtl_sldrm").owlCarousel({    
+            loop:false,
+            items:1,
+            margin:0,
+            stagePadding: 0,
+            dots: true,
+            mouseDrag: true,
+            touchDrag: true,
+            //nav: true,            
+            responsive:{
+                0:{
+                    autoplay:true  
+                },
+                600:{
+                    autoplay:true  
+                },                
+            }
+        });
+
+        dotcount = 1;
+
+        jQuery('.owl-dot').each(function() {            
+            jQuery( this ).addClass( 'dotnumber' + dotcount);
+            jQuery( this ).attr('data-info', dotcount);
+            dotcount=dotcount+1;
+        });
+
+        slidecount = 1;
+
+        jQuery('.owl-item').not('.cloned').each(function() {            
+            jQuery( this ).addClass( 'slidenumber' + slidecount);
+            slidecount=slidecount+1;
+        });
+
+        jQuery('.owl-dot').each(function() {	            
+            grab = jQuery(this).data('info');		
+            slidegrab = jQuery('.slidenumber'+ grab +' img').attr('src');
+            jQuery(this).css("background-image", "url("+slidegrab+")");  	
+        });
+
+        amount = $('.owl-dot').length;
+        gotowidth = 100/amount;			
+        jQuery('.owl-dot').css("height", gotowidth+"%");        
+    });
+
+    var addToCartSuccessPopupp = new $(this).data(document.getElementById('success-adcrtmdl'))
+
+    $('.popup-add-to-cart-btnn').click(function(){
+                var addToCartApiUrl = `${location.origin}/api/basket/add-product/`;
+               
+               
+                var productId = $(this).parents('.featured-product-card').find('.variant-selectt').val();
+                
+                console.log(productId);
+                var current_button = $(this);
+                $(current_button).find('.cart-btn-loader').removeClass('d-none');
+                $(current_button).find('.cart-loader-remove').addClass('d-none');
+                var productApiUrl = `${location.origin}/api/products/${productId}/`;
+                var quantity = 1;
+                $.ajax({
+                    url: addToCartApiUrl,
+                    type: "post",
+                    headers: {
+                        'X-CSRFToken': '{{csrf_token}}'
+                    },
+                    data: JSON.stringify({
+                        "url": productApiUrl,
+                        "quantity": quantity,
+                    }),
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response);
+                       
+                        var text = document.getElementById("shopping-cart-len").innerHTML;
+                        console.log(text)
+                        text = Number(text) + 1;
+                        $('.nav-small-cart').find('#shopping-cart-length').text(String(text))
+                        $('.nav-small-cart-btn').find('#shopping-cart-len').text(String(text))
+                        document.getElementById("shopping-cart-len").innerHTML = text;
+                        $("#shopping-cart-length").removeClass('d-none');
+                        console.log(document.getElementById("shopping-cart-len").innerHTML)
+                        $("#shopping-cart-len").removeClass('d-none');
+                      
+                        $(current_button).find('.cart-btn-loader').addClass('d-none');
+                        $(current_button).find('.cart-loader-remove').removeClass('d-none');
+                        $(current_button).parents('.featured-product-card').find('.popup-add-to-cart-btnn').addClass('d-none');
+                        $(current_button).parents('.featured-product-card').find('.go-to-cart-btn').removeClass('d-none');
+                        $("#success-adcrtmdl").addClass("active")
+                        addToCartSuccessPopupp.show();
+
+                        setTimeout(function(){                                
+                            $("#success-adcrtmdl").removeClass("active");
+                            addToCartSuccessPopupp.hide();
+                        },2500); 
+                       
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        $(current_button).find('.cart-btn-loader').addClass('d-none');
+                        $(current_button).find('.cart-loader-remove').removeClass('d-none');
+
+                        if (error.responseJSON.reason){
+                                
+                                $('#popup-message-text').text(error.responseJSON.reason);
+                             
+                            }
+                            else{
+                            
+                                $('#popup-message-text').text('You cannot add this product');
+                               
+                            }
+
+                        addToCartErrorPopup.show()
+                        setTimeout(function(){
+                            addToCartErrorPopup.hide()
+                        },2000);
+                      
+                    },
+                });
+            });
+
+
+    $('body').on('click', '.item-add-to-cart-btnn', function(){
+                var addToCartApiUrl = `${location.origin}/api/basket/add-product/`;
+                var productId = $(this).parents('.featured-product-card').find('.variant-selectt').val();
+                var productApiUrl = `${location.origin}/api/products/${productId}/`;
+                var quantity = 1;
+                $.ajax({
+                    url: addToCartApiUrl,
+                    type: "post",
+                    headers: {
+                        'X-CSRFToken': '{{csrf_token}}'
+                    },
+                    data: JSON.stringify({
+                        "url": productApiUrl,
+                        "quantity": quantity,
+                    }),
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response);
+                        location.href = `${location.origin}/basket`
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        if (error.responseJSON.reason){
+                            $('#popup-message-text').text(error.responseJSON.reason);
+                            
+                        }
+                        else{
+                            $('#popup-message-text').text('You cannot add this product');
+                            
+                        }
+                    },
+                });
+            });
+
+
+
+    
+  
+
+</script>
+{% endblock %}

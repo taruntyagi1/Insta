@@ -1,0 +1,88 @@
+{% load static %}
+{% load currency_filters %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% load image_tags %}
+
+<!-- <div class="offcanvas offcanvas-end rightcstm_modal" tabindex="-1" id="cartmodal" aria-labelledby="offcanvasRightLabel">
+    <div class="modal-header">
+        <h5>Your Cart <span>{{ request.basket.all_lines|length }}</span></h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close">
+            <img src="{% static 'website/images/ic_cross.png' %}" alt="">
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="cartlisting"> -->
+        <!-- </div>
+        <div class="bottom-buttonbx">                
+            <a class="btn_fill" href="javascript:void(0);">Continue Shopping</a>
+            <a class="btn_outline" href="javascript:void(0);">Proceed To Checkout</a>                
+        </div>
+    </div>
+</div> -->
+{% for line in request.basket.all_lines %}
+    <div class="crtrptr">
+        <div class="media">
+        
+            <img src="{{ MEDIA_URL }}{{ line.product.primary_image.original }}" alt=""></div>
+            
+        <div class="crt_data">
+            <h3>{{line.product.get_complete_title}} ({{line.quantity}})</h3>
+            <div class="slct_str">
+                
+                <div class="rating_l">
+                    {% if line.product.product_rating == 1.0 %}
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    {% elif line.product.product_rating == 2.0 %}
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    {% elif line.product.product_rating == 3.0 %}
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    {% elif line.product.product_rating == 4.0 %}
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    {% elif line.product.product_rating == 5.0 %}
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    {% endif %}
+                    
+                    <span>{{line.quantity}}</span>
+                </div>                            
+            </div>
+            <div class="price_bx">   
+                {% if line.product.stockrecords.first.price_excl_tax != line.product.stockrecords.first.price_retail %}
+                    <h2 class="lssprs">&#8377;{{ line.product.stockrecords.first.price_excl_tax}}</h2>
+                    <h2 class="acprc">&#8377; {{ line.product.stockrecords.first.price_retail}}</h2>
+                {%else%}
+                <h2 class="lssprs">&#8377;{{ line.product.stockrecords.first.price_excl_tax}}</h2>
+                {%endif%}
+
+            </div>
+            <div class="dcnt_rmv">
+                {% if line.product.percent_discount > 0 %}
+                <div class="dscnt">Discount : {{line.product.percent_discount}}%</div>
+                {%else%}
+                <div class="dscnt"></div>
+                {%endif%}
+                <div class="btn_rmv"><a data-cart-id="{{request.basket.id}}" data-line-id="{{line.id}}" class="popup-delete-btn" href="javascript:void(0);">Remove</a></div>
+            </div>
+        </div>
+    </div>
+{%endfor%} 

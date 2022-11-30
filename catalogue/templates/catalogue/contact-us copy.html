@@ -1,0 +1,201 @@
+{% extends "frame.html" %}
+
+{% load staticfiles %}
+{% load image_tags %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load category_saperator %}
+{% load calculate_remainder %}
+{% load category_tags %}
+{% block customheadend %}
+<!--<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
+{% endblock %}
+{% block page-content %}
+<style>
+    .ie-panel{display: none;background: #212121;padding: 10px 0;box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3);clear: both;text-align:center;position: relative;z-index: 1;} html.ie-10 .ie-panel, html.lt-ie-10 .ie-panel {display: block;}
+</style>
+
+<body>
+
+<section class="breadcrumbs-custom">
+    <div class="parallax-container" data-parallax-img="{% static 'images/about-us-6.png'%}">
+        <div class="breadcrumbs-custom-body parallax-content context-dark">
+            <div class="container">
+                <h2 class="text-transform-capitalize breadcrumbs-custom-title">Contact Us</h2>
+                <h5 class="breadcrumbs-custom-text">We are always there! Connect with us any way you want and we will be
+                    more than happy to help you.</h5>
+            </div>
+        </div>
+    </div>
+    <div class="breadcrumbs-custom-footer">
+        <div class="container">
+            <ul class="breadcrumbs-custom-path">
+                <li><a href="index.html">Home</a></li>
+                <li class="active">Contact Us</li>
+            </ul>
+        </div>
+    </div>
+</section>
+<!-- Get in touch-->
+<section class="section section-xl bg-default text-md-left">
+    <div class="container">
+        <div class="title-classic">
+            <h3 class="title-classic-title">Get in touch</h3>
+            <p class="title-classic-subtitle">We are available 7 days from 10am to 7pm via e-mail, WhatsApp or by phone.
+                You can also use our quick contact form to ask a question about our products.</p>
+        </div>
+        <form id="contact_us_form" class="rd-form" data-form-output="form-output-global" data-form-type="contact" method="post">
+            {% csrf_token %}
+            <div class="row row-20 row-md-30">
+                <div class="col-lg-8">
+                    <div class="row row-20 row-md-30">
+                        {% if form.non_field_errors %}
+                            {% for err in form.non_field_errors %}
+                            <div class="form-text text-danger">
+                                {{ err }}
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% for field in form.hidden_fields %}
+                            {{ field }}
+                        {% endfor %}
+                        <div class="col-sm-6">
+                            <div class="form-wrap">
+                                {{ form.first_name }}
+                                <label class="form-label" for="id_{{ form.first_name.name }}">First Name</label>
+                                {% if form.first_name.help_text %}
+                                    <small class="form-text text-muted">{{ form.first_name.help_text|safe }}</small>
+                                {% endif %}
+                                {% if form.first_name.errors %}
+                                    <small class="form-text text-danger">{{ form.first_name.errors }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-wrap">
+                                {{ form.last_name }}
+                                <label class="form-label" for="id_{{ form.last_name.name }}">Last Name</label>
+                                {% if form.last_name.help_text %}
+                                    <small class="form-text text-muted">{{ form.last_name.help_text|safe }}</small>
+                                {% endif %}
+                                {% if form.last_name.errors %}
+                                    <small class="form-text text-danger">{{ form.last_name.errors }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-wrap">
+                                {{ form.email }}
+                                <label class="form-label" for="id_{{ form.email.name }}">E-mail</label>
+                                {% if form.email.help_text %}
+                                    <small class="form-text text-muted">{{ form.email.help_text|safe }}</small>
+                                {% endif %}
+                                {% if form.email.errors %}
+                                    <small class="form-text text-danger">{{ form.email.errors }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-wrap">
+                                {{ form.phone }}
+                                <label class="form-label" for="id_{{ form.phone.name }}">Phone</label>
+                                {% if form.phone.help_text %}
+                                    <small class="form-text text-muted">{{ form.phone.help_text|safe }}</small>
+                                {% endif %}
+                                {% if form.phone.errors %}
+                                    <small class="form-text text-danger">{{ form.phone.errors }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-wrap">
+                        <label class="form-label" for="id_{{ form.message.name }}">Message</label>
+                        {{ form.message }}
+                        {% if form.message.help_text %}
+                            <small class="form-text text-muted">{{ form.message.help_text|safe }}</small>
+                        {% endif %}
+                        {% if form.message.errors %}
+                            <small class="form-text text-danger">{{ form.message.errors }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <button class="button button-lg button-primary button-zakaria" type="submit">Send Message</button>
+        </form>
+    </div>
+</section>
+<!-- Get in touch-->
+<section class="section section-xl bg-gray-4">
+    <div class="container">
+        <div class="row row-30 justify-content-center">
+            <div class="col-sm-6 col-md-4">
+                <h4>Phones</h4>
+                <ul class="contacts-classic">
+                    <li><a href="tel:+91-8800945109">+91-8800945109</a>
+                    </li>
+                    <li><a href="tel:+91-9582180838">+91-9582180838</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <h4>Address</h4>
+                <div class="contacts-classic">
+                    <a href="https://g.page/instafitness?share" target="_blank">
+                        InstaFitness Pvt.Ltd<br>
+                        Building No. 1505, Lower Ground Floor,<br> Lane No. 3, Wazir Nagar, South
+                        Extension I,<br> New Delhi - 110003
+                        INDIA
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <h4>E-mails</h4>
+                <ul class="contacts-classic">
+                    <li><a href="mailto:info@instaeats.in" target="_blank">info@instaeats.in (general queries)</a></li>
+                    <li><a href="mailto:orders@instaeats.in" target="_blank">orders@instaeats.in (order related
+                        queries)</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <!-- RD Google Map-->
+    <div class="container-fluid">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.9956918600924!2d77.22312981508117!3d28.569892082442575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce25bcbffffff%3A0xd313c53a4f588b6f!2sInstaFitness%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1604909516543!5m2!1sen!2sin"
+                width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
+                tabindex="0"></iframe>
+    </div>
+</section>
+
+
+<div class="snackbars" id="form-output-global"></div>
+<!--<script src="js/core.min.js"></script>-->
+<!--<script src="js/script.js"></script>-->
+{% endblock page-content %}
+
+{% block custombodyend %}
+<script>
+    $(document).ready(function(){
+        $("header").removeClass("header-creative-wrap");
+        $("header").removeClass("context-dark");
+    });
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                $('#contact_us_form').html(`
+                    <div class="show row text-center" role="alert">
+                        <div class="col-12  my-5">
+                            <h4 class="text-capitalize">Thank You for showing your Interest. Our team will get back to you soon.</h3>
+                        </div>
+                    </div>
+                `);
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+</script>
+{% endblock %}

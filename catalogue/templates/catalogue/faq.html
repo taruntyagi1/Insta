@@ -1,0 +1,223 @@
+{% extends "website/frame.html" %}
+
+{% load staticfiles %}
+{% load image_tags %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load category_saperator %}
+{% load calculate_remainder %}
+{% load category_tags %}
+    {% block customheadend %}
+<!--    <link rel="stylesheet" href="{% static 'css/style.css' %}">-->
+    {% endblock %}
+{% block page-content %}
+<section class="breadcrumb">
+  <div class="container">
+      <div class="brdcmbx">
+          <div class="brd-d">
+              <h3>FAQ</h3>
+              <ul class="br_submenu">
+                  <li><a href="{{homepage_url}}">Home</a></li>                        
+                  <li>FAQ</li>
+              </ul>
+          </div>                                     
+      </div>
+  </div>
+</section>
+
+<section classs="faq-section">
+  <div class="container">
+      <div class="customer_faq_box">
+          <div class="faq-content">
+              <span>01</span>
+              <i class="ri-map-pin-line"></i>
+              <h3>100% AUTHENTIC</h3>
+              <p>All products sold on our website are FSSAI approved and follow safe and hygienic manufacturing and packaging process.</p>
+           </div>
+           <div class="faq-content">
+              <span>02</span>
+              <i class="ri-map-pin-line"></i>
+              <h3>CUSTOMER CARE</h3>
+              <p>We are always ready to help you and easily reachable via our customer support number and email.</p>
+           </div>
+           <div class="faq-content">
+              <span>03</span>
+              <i class="ri-map-pin-line"></i>
+              <h3>JUST HEALTH. NO SPAM.</h3>
+              <p>We only sell healthy food products that are tasty and provide health and weight management benefits.</p>
+           </div>
+           <div class="faq-content">
+              <span>04</span>
+              <i class="ri-map-pin-line"></i>
+              <h3>RETURNS & REFUND</h3>
+              <p>We respect our customers’ trust on us and thoroughly investigate and resolve all complaints as per our company policy.</p>
+           </div>
+      </div>
+      <div class="faq-accordian">
+
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                    What is Instaeats ?
+                    <span class="arrouw-btn"></span>
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">InstaEats is a natural range of health foods made from superfood seeds and nuts that are healthier alternatives to regular foods, be it better nutritive value, carbohydrate management, sugar management or Keto diet friendly products. InstaEats offers health solution, convenience of consumption and fulfillment of taste and healthy snacking.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                    What benefits do Insta Eats products provide?
+                    <span class="arrouw-btn"></span>
+                </button>
+              </h2>
+              <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">InstaEats products are designed to provide health benefits such as Diabetes, PCOS, Thyroid management and reversal, weight loss, weight gain, immunity, vitality and general health.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                    Who can consume InstaEats products?
+                    <span class="arrouw-btn"></span>
+                </button>
+              </h2>
+              <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">InstaEats products are beneficial and safe for consumption by everyone. Kids, adults and elderly, everyone can consume InstaEats products without worrying about any negative or side-effect whatsoever.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingfour">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsefour" aria-expanded="false" aria-controls="flush-collapseThree">
+                      Do InstaEats products have side effects?
+                      <span class="arrouw-btn"></span>
+                  </button>
+                </h2>
+                <div id="flush-collapsefour" class="accordion-collapse collapse" aria-labelledby="flush-headingfour" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">InstaEats products are completely natural and carry 0 side effects..</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingfive">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsefive" aria-expanded="false" aria-controls="flush-collapseThree">
+                    How to place order?
+                    <span class="arrouw-btn"></span>
+                  </button>
+                </h2>
+                <div id="flush-collapsefive" class="accordion-collapse collapse" aria-labelledby="flush-headingfive" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">Simply click on a product category in top menu or directly click a product in the product list anywhere on the website to reach product details page. Check volume, select quantity and proceed to checkout. Before making payment, please ensure your delivery location is serviceable by courier company.</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingsix">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsesix" aria-expanded="false" aria-controls="flush-collapseThree">
+                    How to cancel order?
+                    <span class="arrouw-btn"></span>
+                  </button>
+                </h2>
+                <div id="flush-collapsesix" class="accordion-collapse collapse" aria-labelledby="flush-headingsix" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">Currently we do not have a provision for order cancellation.</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingseven">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseseven" aria-expanded="false" aria-controls="flush-collapseThree">
+                    How to return/replace the order?
+                    <span class="arrouw-btn"></span>
+                  </button>
+                </h2>
+                <div id="flush-collapseseven" class="accordion-collapse collapse" aria-labelledby="flush-headingseven" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">For all such queries please refer to the Returns & refund policy.</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingeight">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseeight" aria-expanded="false" aria-controls="flush-collapseThree">
+                    Where all do you deliver your products?
+                    <span class="arrouw-btn"></span>
+                  </button>
+                </h2>
+                <div id="flush-collapseeight" class="accordion-collapse collapse" aria-labelledby="flush-headingeight" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">We ship our products all over India.</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingnine">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsenine" aria-expanded="false" aria-controls="flush-collapseThree">
+                    When will I receive my order?
+                    <span class="arrouw-btn"></span>
+                  </button>
+                </h2>
+                <div id="flush-collapsenine" class="accordion-collapse collapse" aria-labelledby="flush-headingnine" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">Delivery of our products takes at least 7-8 business days. It may get delayed on certain days due to extreme weather conditions or governmental regulatory activities. Depending on the product availability, few orders might take more than 10-12 days to ship. Customers will be contacted by e-mail OR mobile if there is any such problem related to processing the order or shipping the product in time.
+                    For the orders intended to be received before a specific event or a festival, where specific delivery time-frame is important, customers are advised to place the order at least 15 days before the expected delivery date. For urgent deliveries kindly contact us before placing the order.</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingten">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseten" aria-expanded="false" aria-controls="flush-collapseThree">
+                    Delivered product feels as hard as rock. Why?
+                    <span class="arrouw-btn"></span>
+                  </button>
+                </h2>
+                <div id="flush-collapseten" class="accordion-collapse collapse" aria-labelledby="flush-headingten" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">Since some of the products are high in oil/fat content, vacuum packing is done on them to avoid air contact for enhanced shelf life.</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-heading11">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse11" aria-expanded="false" aria-controls="flush-collapseThree">
+                    What are the storage instructions for the products?
+                    <span class="arrouw-btn"></span>
+                  </button>
+                </h2>
+                <div id="flush-collapse11" class="accordion-collapse collapse" aria-labelledby="flush-heading11" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">Storage instructions for every product are different and mentioned on the product.</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-heading12">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse12" aria-expanded="false" aria-controls="flush-collapseThree">
+                    My question is not listed above. What should I do?
+                    <span class="arrouw-btn"></span>
+                  </button>
+                </h2>
+                <div id="flush-collapse12" class="accordion-collapse collapse" aria-labelledby="flush-heading12" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">Please reach out to us at +91-8800945109 or email us at orders@instaeats.in (order related queries) or info@instaeats.in (general queries).</div>
+                </div>
+              </div>
+          </div>
+    </div>
+
+  </div>
+
+
+</section>
+
+<section class="nswihlhc section_pdng">
+  <div class="container">
+      <div class="constnw">
+          <div class="constbx">
+              <h1>Not sure which is the right plan for you? Get instant help from a leading health coach.</h1>
+              <a class="btn_fl" href="{%url 'website:contact_us'%}">Consult Now</a>
+          </div>
+          <div class="mda_img">
+              <img src="{% static 'website/images/img_4.png' %}" alt="">
+          </div>
+      </div>
+  </div>
+</section>
+
+{% endblock page-content %}
+
+{% block custombodyend %}
+<script>
+    $(document).ready(function(){
+        $("header").removeClass("header-creative-wrap");
+        $("header").removeClass("context-dark");
+    });
+</script>
+{% endblock %}

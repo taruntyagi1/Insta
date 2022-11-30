@@ -1,0 +1,282 @@
+{% extends "frame.html" %}
+
+{% load staticfiles %}
+{% load image_tags %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load category_saperator %}
+{% load category_tags %}
+{% load i18n %}
+{% block customheadend %}
+<!--<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
+{% endblock %}
+{% block page-content %}
+<section class="breadcrumbs-custom">
+    {% comment %} <div class="parallax-container" data-parallax-img="{% static 'images/bg-about-1.webp'%}">
+        <div class="breadcrumbs-custom-body parallax-content context-dark">
+            <div class="container">
+                <h2 class="text-transform-capitalize breadcrumbs-custom-title">Health Store</h2>
+                <h5 class="breadcrumbs-custom-text">
+                    Perfect selection of specially designed food products and ingredients<br class="d-none d-md-block">
+                    for every need offering great taste, health benefits and value for money!
+                </h5>
+            </div>
+        </div>
+    </div> {% endcomment %}
+    <div class="breadcrumbs-custom-footer">
+        <div class="container">
+            <ul class="breadcrumbs-custom-path">
+                <li><a href="{{homepage_url}}">Home</a></li>
+                <li><a href="{% url 'catalogue:product_list' %}">Shop</a></li>
+                <li class="active">{{ product.get_title|truncatechars:30 }}</li>
+            </ul>
+        </div>
+    </div>
+</section>
+<!-- Single Product-->
+
+<section class="section section-sm section-first bg-default">
+    <div class="container">
+        <div class="row row-30">
+            <div class="col-lg-6">
+                <div class="slick-vertical slick-product">
+                    <!-- Slick Carousel-->
+                    <div class="slick-slider carousel-parent" id="carousel-parent" data-items="1" data-swipe="true"
+                         data-child="#child-carousel" data-for="#child-carousel">
+                        {% with all_images=product.get_all_images %}
+                        {% for image in all_images %}
+                        <div class="item">
+                            <div class="slick-product-figure">
+                                <img src="{{ MEDIA_URL }}{{ image.original }}" alt="" width="530" height="480"/>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endwith %}
+                    </div>
+                    {% with all_images=product.get_all_images %}
+                    <div class="slick-slider child-carousel slick-nav-1" id="child-carousel" data-arrows="true"
+                         data-items="3" data-sm-items="3" data-md-items="3" data-lg-items="3" data-xl-items="3"
+                         data-xxl-items="3" data-md-vertical="true" data-for="#carousel-parent">
+                        {% for image in all_images %}
+                        <div class="item">
+                            <div class="slick-product-figure">
+                                <img src="{{ MEDIA_URL }}{{ image.original }}" alt="" width="530" height="480"/>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endwith %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="single-product">
+                    <h3 class="text-transform-none font-weight-medium">{{ product.get_title|truncatechars:50 }}</h3>
+                    <div class="group-md group-middle">
+                        {% if product.stockrecords.first %}
+                        <div class="single-product-price">
+                            <i class="fa fa-rupee"></i>
+                            {{ product.stockrecords.first.price_excl_tax }}
+                        </div>  
+                        {% endif %}
+                        <div class="single-product-rating">
+                            {% if product.round_rating == 1 %}
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="dark-icon mdi mdi-star"></span>
+                                <span class="dark-icon mdi mdi-star"></span>
+                                <span class="dark-icon mdi mdi-star"></span>
+                                <span class="dark-icon mdi mdi-star"></span>
+                            {% elif product.round_rating == 2 %}
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="dark-icon mdi mdi-star"></span>
+                                <span class="dark-icon mdi mdi-star"></span>
+                                <span class="dark-icon mdi mdi-star"></span>
+                            {% elif product.round_rating == 3 %}
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="dark-icon mdi mdi-star"></span>
+                                <span class="dark-icon mdi mdi-star"></span>
+                            {% elif product.round_rating == 4 %}
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="dark-icon mdi mdi-star"></span>
+                            {% elif product.round_rating == 5 %}
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="icon mdi mdi-star"></span>
+                                <span class="icon mdi mdi-star"></span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if product.description %}
+                    <p>{{ product.description|safe|striptags }}</p>
+                    {% endif %}
+                    <hr class="hr-gray-100">
+                    <ul class="list list-description">
+                        <li><span>Categories:</span>
+                            {% for object in product.categories.all %}
+                            <span>{{object.name}}</span>
+                            {% endfor %}
+                        </li>
+                        <li><span>Weight:</span>
+                            {% for av in product.attribute_values.all %}
+                            <span>{{ av.value_as_html }}</span>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                    {% if not product.is_parent %}
+                        {% block product_basket_form %}
+                            <div class="group-xs group-middle">
+                                <div class="product-stepper">
+                                    <input class="form-input" type="number" data-zeros="true" value="1" min="1" max="1000" id="product_quantity">
+                                </div>
+<!--                                <div>-->
+<!--                                    <a class="button button-lg button-primary button-zakaria" href="#">Add to cart</a>-->
+<!--                                </div>-->
+                                {% include "catalogue/partials/add_to_basket_form.html" %}
+                            </div>
+                        {% endblock %}
+                    {% else %}
+                        {% block variants %}
+                            <h3 class="text-transform-none font-weight-medium mt-3">{% trans 'Variants:' %}</h3>
+                            {% for child in product.children.public %}
+                                {% purchase_info_for_product request child as child_session %}
+                                {% if child_session.availability.is_available_to_buy %}
+                                    <a href="{{ child.get_absolute_url }}">{{forloop.counter}}. {{ child.get_title }}</a><br>
+                                {% endif %}
+                            {% endfor %}
+                        {% endblock %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- Bootstrap tabs-->
+        <div class="tabs-custom tabs-horizontal tabs-line" id="tabs-1">
+            <!-- Nav tabs-->
+            <div class="nav-tabs-wrap">
+                <ul class="nav nav-tabs nav-tabs-1">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="#tabs-1-2" data-toggle="tab">Additional information</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="#tabs-1-3" data-toggle="tab">Delivery and payment</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Tab panes-->
+            <div class="tab-content tab-content-1">
+                <div class="tab-pane fade show active" id="tabs-1-2">
+                    <div class="single-product-info">
+                        <div class="unit unit-spacing-md flex-column flex-sm-row align-items-sm-center">
+                            <div class="unit-left"><span class="icon icon-80 mdi mdi-information-outline"></span></div>
+                            <div class="unit-body">
+                                <p>{{ product.additional_information|safe }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-1-3">
+                    <div class="single-product-info">
+                        <div class="unit unit-spacing-md flex-column flex-sm-row align-items-sm-center">
+                            <div class="unit-left"><span class="icon icon-80 mdi mdi-truck-delivery"></span></div>
+                            <div class="unit-body">
+                                <p>{{ product.ingredients|safe }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tabs-1-3">
+                    <div class="single-product-info">
+                        <div class="unit unit-spacing-md flex-column flex-sm-row align-items-sm-center">
+                            <div class="unit-left"><span class="icon icon-80 mdi mdi-truck-delivery"></span></div>
+                            <div class="unit-body">
+                                <p>{{ product.benefits|safe }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Related Products-->
+{% with recommended_products=product.sorted_recommended_products|slice:":6" %}
+{% if recommended_products %}
+<section class="section section-sm section-last bg-default">
+    <div class="container">
+        <h4 class="font-weight-sbold">Featured Products</h4>
+        <div class="row row-lg row-30 row-lg-50 justify-content-center">
+            {% for product in recommended_products %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <!-- Product-->
+                <article class="product wow fadeInRight">
+                    <div class="product-body">
+                        <a href="{{ product.get_absolute_url }}" target="_blank">
+                            <div class="product-figure">
+                                <img src="{{MEDIA_URL}}{{product.primary_image.original}}" alt="" width="196"
+                                     height="134"/>
+                            </div>
+                            <h5 class="product-title">
+                                <a href="{{ product.get_absolute_url }}">{{ product.get_title|truncatechars:50 }}</a>
+                            </h5>
+                        </a>
+                        {% if product.stockrecords.first.price_excl_tax == product.stockrecords.first.price_retail %}
+                        <div class="product-price-wrap">
+                            <div class="product-price"><i class="fa fa-rupee"></i> {{ product.stockrecords.first.price_excl_tax }}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="product-price-wrap">
+                            <div class="product-price product-price-old"><i class="fa fa-rupee"></i> {{ product.stockrecords.first.price_retail }}
+                            </div>
+                            <div class="product-price"><i class="fa fa-rupee"></i> {{ product.stockrecords.first.price_excl_tax }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if product.stockrecords.first.price_excl_tax == product.stockrecords.first.price_retail %}
+                    <span class="product-badge product-badge-sale">Sale</span>
+                    {% else %}
+                    <span class="product-badge product-badge-new">New</span>
+                    {% endif %}
+                    <div class="product-button-wrap">
+                        <div class="product-button">
+                            <a class="button button-secondary button-zakaria fl-bigmug-line-search74" href=""></a>
+                        </div>
+                        <div class="product-button">
+                            {% if not product.is_parent %}
+                                {% include "catalogue/partials/small_add_basket_form.html" %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endwith %}
+<div class="snackbars" id="form-output-global"></div>
+<!--<script src="js/core.min.js"></script>-->
+<!--<script src="js/script.js"></script>-->
+{% endblock page-content %}
+
+{% block custombodyend %}
+<script>
+    $(document).ready(function(){
+        $("header").removeClass("header-creative-wrap");
+        $("header").removeClass("context-dark");
+    });
+
+    $('#product_quantity').on('change keyup', function(){
+        $('#id_quantity').val($(this).val());
+    });
+
+</script>
+{% endblock %}

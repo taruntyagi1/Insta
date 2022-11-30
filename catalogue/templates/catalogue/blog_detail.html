@@ -1,0 +1,170 @@
+
+{% extends "website/frame.html" %}
+
+{% load staticfiles %}
+{% load image_tags %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load category_saperator %}
+{% load category_tags %}
+{% block customheadend %}
+{% endblock %}
+{% block page-content %}
+        <section class="breadcrumb">
+            <div class="container">
+                <div class="brdcmbx">
+                    <div class="brd-d">
+                        <h3>Health Store</h3>
+                        <ul class="br_submenu">
+                            <li><a href="javascript:void(0);">Home</a></li>       
+                            <li><a href="blog.html">Blog</a></li>                                                    
+                            <li>Blog  Details</li>
+                        </ul>
+                    </div>                                     
+                </div>
+            </div>
+        </section>
+
+        <section class="blog_dtl_section">
+            <div class="container">
+                <div class="blog_detailbx">
+                    <div class="media"><img class="img-fluid" src="{%static 'website/images/article_image.png'%}" alt=""></div>
+                    <h3>Types of Dry Fruits: 18 List of Dry Fruits Name to Add to Your Diet</h3>
+                    <div class="date_share">
+                        <div class="date"><i class="ri-calendar-event-fill"></i> April 19, 2021</div>
+                        <div class="sharebx">
+                            <label for="">Share :</label>
+                            <div class="sharelnk">
+                                <a href="javascript:void(0);"><i class="ri-google-fill"></i></a>
+                                <a href="javascript:void(0);"><i class="ri-twitter-fill"></i></a>
+                                <a href="javascript:void(0);"><i class="ri-instagram-line"></i></a>
+                                <a href="javascript:void(0);"><i class="ri-linkedin-box-fill"></i></a>                                
+                            </div>
+                        </div>
+                    </div>
+                    <p>When anyone asks us about the best part of our life we say 'Childhood' without any second thought. The memories, friendships, school trips, the super yummy tamarind lollipops on the way to school, the orange candies, childhood crushes, and the list goes on. We might laugh and cry at the same time and that's the power of nostalgia and it's the most essential part of our life. Especially childhood nostalgia will always have an emotional connection with us because as a child, we know only happiness and curiosity towards everything we come across.</p>
+                    <p>As per the recent research, Nostalgia takes us through a whirlwind of emotions and these emotions change our state of mind quickly which eventually changes our perspective towards relationships and life. In those lonely hours when we go down memory lane, we feel a sense of social support and care we have from our family.</p>
+                    <p>The best childhood memory we all have is the summer holidays when we visit our grandparents and they prepare so many raw mango recipes, homemade lollipops with healthy ingredients and they spare the mangoes on trees so that we can have fun plucking them. The sweet mangoes are not just a fruit, but there is a lot of emotional bonding towards it, and the Mango jelly also called Sweet Aam pops made with mango pulp was one of our favorite homemade snacks filled with the softness and sweetness of mango.</p>
+                    <p>On a warm evening when you have the raw mango, the happiness in the first chew of spicy raw mango is just beyond words, it takes us through every bit of our childhood, the desi handmade snacks with natural ingredients, playing hide and seek with a large group of friends, the love and care of grandparents. The most touching memories were when our grandmothers and aunts packed loads of healthy stuff, handmade jaggery ladoos with desi ghee, and dried amla candies to quickly heal from cough and cold with so much love and hope in their eyes to see us again soon. All these memories give us immense contentment and great confidence that we have people on whom we can count on. When we catch up with our old friends now, we laugh out loud reminiscing those innocent childhoods, when we believed plants will grow inside our tummy if we swallow seeds and when we hear the voice on the radio, we assume people were sitting inside the radio.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="dssfmp_bx bg-white">
+            <div class="container">
+                <div class="head">
+                    <div class="hd_ttl">
+                        <h3>Similar Products</h3>
+                    </div>
+                    <div class="hd_linkbtn">
+                        <select class="form-control">
+                            <option value="">Select</option>
+                            <option>6 Days Serving</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="dssfmpslider" class="owl-carousel cstm_slider_ecom">
+                    <div class="item">
+                        <div class="prdt">                                 
+                            <div class="m_dea">
+                                <img class="prd_itm_img" src="{%static 'website/images/img_icon.png' %}" alt="">
+                            </div>
+                            <div class="data_bx">
+                                <h1>Diabetes health</h1>
+                                <p>(support growth & immunity naturally)</p>
+                                <div class="star_bx">
+                                   <span class="str_img"><img src="{%static 'website/images/ic_star.png' %}"></span>
+                                   <span class="cnt_vl">19</span>
+                                </div>
+                                <div class="dt_slctor">
+                                    <select class="form-control">
+                                        <option>Select</option>
+                                        <option>6 Days Serving</option>
+                                    </select>
+                                </div>
+                                <div class="price_bx">
+                                    <h2 class="lssprs">&#8377;2970.00</h2>
+                                    <h2 class="acprc">&#8377;2525.00</h2>
+                                </div>
+                                <div class="btn_crtby">
+                                    <a class="btn_fill" href="javascript:void(0);">Add To Cart</a>
+                                    <a class="btn_outline" href="javascript:void(0);">Buy Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                         
+                </div>
+            </div>
+        </section>
+
+        <section class="meet_section">
+            <div class="container">
+                <div class="head">
+                    <h3>Meet Our Followers</h3>
+                </div>
+                
+                <div id="mofsldr" class="owl-carousel">
+                    <div class="item">
+                        <div class="mof_slbx">
+                            <div class="med_img">
+                                <img src="{%static 'website/images/img_1.png'%}" alt=""> 
+                                <a class="mof_vdbtn" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#videomdl"><img class="img-fluid" src="{% static 'website/images/ic_yt.png' %}"></a>                                   
+                            </div>                                
+                        </div>
+                    </div>
+                  
+                </div>                
+            </div>
+        </section>
+
+        <section class="wcaocet_section">
+            <div class="container-fluid">
+                <div class="head-cn">
+                    <h1>We Proudly Own Our Customer's Happiness</h1>
+                </div>
+                <div id="wca_owl" class="owl-carousel">
+                    <div class="item">
+                        <div class="wcace_b">
+                            <h3 class="ht_ttl">Very hygenic & pure snacks for kids.. My baby is loving it.. My Kitchen cabinet is stocked for a week.. surely interested to buy again.Best unique flavours of India which make me remember my childhood by having Imlipop!</h3>
+                            <img class="usr_icni" src="{%static 'website/images/ic_user_pic.png' %}" alt="">
+                            <h4>manjot Singh</h4>
+                            <p>Delhi</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                    
+                </div>
+            </div>
+        </section>
+
+        <section class="nswihlhc section_pdng">
+            <div class="container">
+                <div class="constnw">
+                    <div class="constbx">
+                        <h1>Not sure which is the right plan for you? Get instant help from a leading health coach.</h1>
+                        <a class="btn_fl" href="javascript:void(0);">Consult Now</a>
+                    </div>
+                    <div class="mda_img">
+                        <img src="{%static 'website/images/img_4.png' %}    " alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal -->
+  <div class="modal fade csmtvideomdl" id="videomdl" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">          
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-fill"></i></button>
+        </div>
+        <div class="modal-body">
+            <iframe class="ifrmvideo" src="https://www.youtube.com/embed/gcRcVVfm8I4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+ 
+      </div>
+    </div>
+  </div>
+
+    {%endblock%}

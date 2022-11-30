@@ -1,0 +1,167 @@
+{% extends 'oscar/dashboard/layout.html' %}
+
+{% load i18n %}
+{% load staticfiles %}
+{% load image_tags %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="active">{% trans " Questionaire" %}</li>
+    </ul>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header">
+       
+        <h1>{% trans "Questionaire" %}</h1>
+        <form method=""  enctype="multipart/form-data">
+        <select name="medical" id="">
+            <option value="">Select Medical Condition</option>
+            <option value="Thyroid">Thyroid</option>
+            <option value="Diabetes">Diabetes</option>
+            <option value="PCOD">PCOD</option>
+            <option value="Heart diseases">Heart diseases</option>
+            <option value="Digestive Issues">Digestive Issues</option>
+            <option value="Skin Problems">Skin Problems</option>
+            <option value="Constipation">Constipation</option>
+            <option value="Acidity">Acidity</option>
+            <option value="Hyperpigmenation">Hyperpigmenation</option>
+        </select>
+        
+        <select name="symptoms" id="">
+            <option value="">Select Symptions</option>
+            <option value="Confusion">Confusion</option>
+            <option value="Fatigue">Fatigue</option>
+            <option value="Tiredness and Sleepiness">Tiredness and Sleepiness</option>
+            <option value="Exhaustion">Exhaustion</option>
+            <option value="Anemia">Anemia</option>
+            <option value="coldness">coldness</option>
+            <option value="Burning or sore tongue">Burning or sore tongue</option>
+            <option value="Cravings for non-nutritive substances">Cravings for non-nutritive substances</option>
+            <option value="Craving for Sugar">Craving for Sugar</option>
+            <option value="Irregular hunger feeling">Irregular hunger feeling</option>
+            <option value="Muscle cramps">Muscle cramps</option>
+            <option value="Frequent Sweating">Frequent Sweating</option>
+            <option value="Irregular Heartbeat">Irregular Heartbeat</option>
+            <option value="Feeling Bloated">Feeling Bloated</option>
+            <option value="Nervousness">Nervousness</option>
+            <option value="Cracked lips">Cracked lips</option>
+            <option value="Dry skin">Dry skin</option>
+            <option value="Hair loss">Hair loss</option>
+            <option value="Slow wound Healing">Slow wound Healing</option>
+            <option value="Nose bleeding">Nose bleeding</option>
+            <option value="Cramps in legs and muscles">Cramps in legs and muscles</option>
+            <option value="Pain and Weakness in Muscles">Pain and Weakness in Muscles</option>
+            <option value="Feeling of Depression, Anxiety, Stress">Feeling of Depression, Anxiety, Stress</option>
+            <option value="Joint Pain">Joint Pain</option>
+            <option value="Hairfall">Hairfall</option>
+            <option value="Sensitive Skin and Acne">Sensitive Skin and Acne</option>
+            <option value="Loss of Appetite">Loss of Appetite</option>
+            <option value="Loss of taste">Loss of taste</option>
+            <option value="Dry & Damaged hair">Dry & Damaged hair</option>
+            <option value="Brittle Nails">Brittle Nails</option>
+            <option value="Craving for Snacks">Craving for Snacks</option>
+            <option value="Early graying of hair">Early graying of hair</option>
+            <option value="Loss of Libido">Loss of Libido</option>
+            <option value="Weakness">Weakness</option>
+            <option value="Irritabilty">Irritabilty</option>
+            
+        </select>
+        <button class="btn btn-lg btn-primary" type="submit">Get Details</button>
+    </form>
+    </div>
+{% endblock header %}
+
+{% block dashboard_content %}
+
+    <div class="table-header">
+        <h2><i class="icon-file icon-large"></i>{{ queryset_description }}</h2>
+    </div>
+
+
+    {% if object_list %}
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Mobile Number</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Medical Condition</th>
+                        <th>Symptoms</th>
+                        <th>Report Url</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for object in object_list %}
+                        <tr>
+                            <td>{{ object.timestamp}}</td>
+                            <td>{{ object.sys_id}}</td>
+                            <td>
+                                {{ object.name}}
+                            </td>
+                            <td>
+                                {{object.mobile_number}}
+                            </td>
+                            <td>
+                                {{object.email}}
+                            </td>
+                            <td>
+                                {{object.age}}
+                            </td>
+                           
+                            <td>{{object.gender}}
+                            </td>
+                            <td>
+                                {{object.get_medical_condition|join:', '}}
+                            </td>
+                            <td>
+                                {{object.get_symptoms_val|join:', '}}
+                            </td>
+                            <td>
+                                <a href="{{object.get_absolute_url}}">Click Here</a>
+                            </td>
+
+                            <td>
+                                <form method="post" id="delete-form-{{forloop.counter}}">
+                                    {% csrf_token %}
+                                    <div class="btn-toolbar">
+                                        <div class="btn-group">
+                                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                                                {% trans "Actions" %}
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu pull-right">
+                                                <input type="hidden" name="questionaire" value="{{object.id}}">
+                                               
+                                                <li><a id="delete_page_{{ object.id }}" role="button" onclick="document.getElementById('delete-form-{{forloop.counter}}').submit();">{% trans "Delete" %}</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
+                            
+                           
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include "oscar/dashboard/partials/pagination.html" %}
+    {% else %}
+        <table class="table table-striped table-bordered table-hover">
+            <tr><td>{% trans "No pages found." %}</td></tr>
+        </table>
+    {% endif %}
+
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+{{ block.super }}
+{% endblock %}

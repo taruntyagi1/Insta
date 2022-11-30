@@ -1,0 +1,18 @@
+{% load static %}
+<div class="constnw">
+    {% for object in consult  %}
+    <div class="mda_img">
+        <img alt="" class="" src="{{MEDIA_URL}}{{object.image}}">
+    </div>
+    <div class="constbx">
+        <h1>{{object.title}}</h1>   
+        <div class="d-flex align-item-center">
+            <!-- <button type="button" class="btn btn_fl"  >Consult Now</button> -->
+            <a class="btn btn_fl" href="{% url 'website:contact_us' %}">{{object.button}}</a> 
+            <a class="btn tdtbtn" href="{% url 'website:defficiency_assessment' %}" target="_blank">
+                take Deficiency Test <i class="ri-arrow-right-line"></i>
+            </a>
+        </div>
+    </div>
+    {% endfor %}    
+</div>

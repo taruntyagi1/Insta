@@ -1,0 +1,95 @@
+{% extends "website/frame.html" %}
+
+{% load staticfiles %}
+{% load image_tags %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load category_saperator %}
+{% load calculate_remainder %}
+{% load category_tags %}
+
+{% block page-content %}
+<section class="doctor_advice review_list">
+
+    <div class="container">
+        <div class="head">
+            <div class="ttl_h">
+                <h2 class="">Dietician's Advice</h2>
+            </div>
+            
+        </div>
+
+          
+
+            <div id="detcanadvice" class="row dctradv_bx_m">
+
+
+                {%for object in dietitions_and_nutritionists %}
+               
+                    <div class="col-md-4 drcbx cstmrvvdo">
+                        <a href="javascript:void(0);" class="cstmstoryclick" data-video-url="https://www.youtube.com/embed/{{object.video_id}}">
+                            <img class="ytbicon" src="{% static 'website/images/ic_youtube.png' %}" alt="">
+                            <img class="dtcnimg" src="https://img.youtube.com/vi/{{object.video_id}}/0.jpg" alt="">
+                        </a>                        
+                    </div>   
+                              
+                {% endfor %}                 
+
+              
+
+            </div>
+        </div>
+    </section>
+
+     
+  <div class="modal fade csmtvideomdl" id="CustomersStoryy" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">          
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-fill"></i></button>
+        </div>
+        <div class="modal-body">
+            <iframe class="ifrmvideo" id="playerIDE" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div> 
+      </div>
+    </div>
+  </div>
+
+
+
+
+{% endblock page-content %}           
+
+
+{% block custombodyend %}
+<script src="js/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+
+                        
+        var hideDietitions = document.getElementById('CustomersStoryy');        
+        if (hideDietitions){
+            hideDietitions.addEventListener('hidden.bs.modal', function (event) {                
+                $('#playerIDE').attr('src', "");
+            });
+        };
+
+        $('.cstmstoryclick').click(function(){
+            var videoUrl = $(this).data('videoUrl');
+            $('#playerIDE').attr('src', videoUrl);
+            $('#CustomersStoryy').modal('show');
+        });                      
+        
+    
+
+        $('.btn-close').click(function() {
+            var srcvideoUrl= $('#playerID').get(0).src;
+            $('#playerIDE').get(0).src='';
+            $('#playerIDE').get(0).src=srcvideoUrl;        
+        });
+    });
+
+
+</script>
+{% endblock %}

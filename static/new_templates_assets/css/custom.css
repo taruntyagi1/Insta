@@ -1,0 +1,261 @@
+.modal.right .modal-dialog{
+    position: fixed;
+    margin-top: 20px;
+    width: 1000px;
+    height: 100%;
+
+    -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+         -o-transform: translate3d(0%, 0, 0);
+            transform: translate3d(0%, 0, 0);
+
+}
+.modal-content{
+    height: 780px;
+margin-top: -30px;
+float: right;
+width: 1500px;
+}
+
+.modal.show .modal-dialog {
+transform: none;
+float: right;}
+
+
+.modal.right.fade .modal-dialog {
+    right: 0px;
+    -webkit-transition: opacity 0.1s linear, right 0.1s ease-out;
+       -moz-transition: opacity 0.1s linear, right 0.1s ease-out;
+         -o-transition: opacity 0.1s linear, right 0.1s ease-out;
+            transition: opacity 0.1s linear, right 0.1s ease-out;
+}
+
+.modal.right.fade.in .modal-dialog {
+    right: -600px;
+}
+.close.closebtn{
+    font-size: 30px;
+}
+.modal-body{
+    background-color: #f1ebeb;
+}
+.card{
+    width: 23rem !important;
+    background-color: white;
+}
+
+#main-card{
+    height: 183px;
+}
+.card-img, .card-img-bottom, .card-img-top {
+    width: 76px;
+height: 72px;
+margin-left: 11px;
+margin-top: 20px;
+border: 1px solid #eeeeee;
+background-color: #eeeeee;
+}
+.item_name{
+margin-top: 20px;
+margin-left: 10px
+}
+.weight{
+margin-left: 3px;
+margin-top: 5px;
+font-size: 13px;
+}
+.weight .item_weight{
+margin-left: 161px;
+color: orangered;
+font-weight: 600;
+}
+.quantity{
+margin-left: 3px;
+margin-top: 5px;
+font-size: 13px;
+}
+.add_remove{
+margin-left: 140px;
+border: 1px solid #3c3a3a;
+padding: 0px 14px 0px 15px;
+margin-top: 4px;
+border-radius: 3px;
+}
+.price{
+margin-top: 16px;
+margin-left: 10px;
+}
+.price h3{
+font-size : 15px;
+
+}
+.price .sub{
+margin-left: 10px;
+font-size: 20px;
+}
+.price #add{
+margin-left: 135px;
+font-size: 30px;
+font-weight: lighter;
+}
+
+#crd-offers{
+margin-top: 13px;
+background-color:white ;
+}
+.rgt_arrow{
+margin-left: 160px;
+color: orangered;
+font-size: 19px;
+}
+
+#crd-offers .card-body a{
+text-decoration: none;
+margin-left: 10px;
+color: black;
+font-weight: 500;
+text-transform: capitalize;
+letter-spacing: 1px;
+}
+
+
+#card-summary{
+    margin-top: 13px;
+}
+
+#card-summary .card-body{
+    font-size: 20px;
+    font-weight: 300;
+}
+#card-summary .card-body h4{
+    font-weight: 400;
+}
+.bag_total .bag-price{
+    margin-left: 220px;
+    font-weight: 500;
+}
+.promo .promo_apply{
+    margin-left: 192px;
+    font-weight: 500;
+}
+
+.grand .grand_price{
+    margin-left: 161px;
+    font-weight: 500;
+}
+
+.bag_total p{
+    margin-left: 15px;
+}
+
+.promo p{
+    margin-left: 15px;
+}
+.promo{
+    margin-top: 5px;
+}
+
+
+.line1{
+    border-bottom: 2px solid #c5bbbb;
+    margin-top: 3px;
+    width: 338px;
+    margin-left: 13px;
+
+
+}
+
+.grand{
+    margin-left: 15px;
+    margin-top: 25px;
+}
+.line2{
+    border-bottom: 2px solid #c5bbbb;
+    margin-top: 8px;
+    width: 338px;
+    margin-left: 13px;
+    margin-bottom: 10px;
+}
+#card-summary{
+    height: 215px;
+}
+.bag_total{
+    margin-bottom: 18px;
+}
+.promo{
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+.grand{
+    margin-left: 15px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.note{
+    font-weight: 700;
+}
+
+.main_note{
+   
+    margin-top: 10px;
+    background:  url(https://instaeats.in/static/new_templates_assets/images/shield_b33c0c.svg) no-repeat 0 50%;
+    
+}
+.main_note p{
+
+    font-style: italic;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-left: 40px;
+
+}
+
+#check_out{
+    margin-top: 13px;
+    height: 155px;
+}
+
+.check_total .total{
+
+
+    font-weight: 700;
+    font-size: 16px;
+
+}
+.check_total .check_btn{
+    margin-left: 250px;
+}
+.check_total p{
+    margin-top: 10px;
+    margin-bottom: -16px;
+    font-weight: 500;
+}
+
+.check_total .check_btn a{
+    color: white;
+    padding: 11px 12px 9px 11px;
+    background: orangered;
+    border-radius: 7px;
+}
+
+.modal-title
+{
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    margin-left: 133px;
+    font-size: 24px;
+}
+
+
+.basket2{
+    height: 100%;
+    width: 600px;
+    background-color: white;
+}
+
+
+.navbar-brand img{
+    height: 200px;
+}

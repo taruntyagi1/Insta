@@ -1,0 +1,209 @@
+{% load go_to_cart_product %}
+{% load purchase_info_tags %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load image_tags %}
+{% load display_tags %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load category_saperator %}
+{% load category_tags %}
+
+{% for product in object_list %}
+{% if product.is_parent %}
+<div class="reptrbx" id="featured-product-{{product.id}}">                
+    <!-- <div class="prdtophd">
+        <h3><a href="{{ product.get_absolute_url}}">{{product.product_title}}</a></h3>
+        <p>{{product.product_tagline}}</p>
+    </div> -->
+    <div class="prdt featured-product-card">                            
+        <div class="m_dea">
+            {% with image=product.primary_image %}
+                {% oscar_thumbnail image.original "255x255" upscale=True as thumb %}
+                <a href="{{ product.get_absolute_url}}"><img class="prd_itm_img " src="{{thumb.url}}" data-image="{{thumb.url}}"
+                data-zoom-image="{{thumb.url}}" /></a>
+            {%endwith%}
+            <!-- <a href="{{ product.get_absolute_url}}"><img class="prd_itm_img lazy" data-src="{{MEDIA_URL}}{{product.primary_image.original}}" alt=""></a> -->
+        </div>
+        <div class="data_bx">
+            <h1><a href="{{ product.get_absolute_url}}">{{product.title|truncatechars:35}}</a></h1>
+            <!-- <p>{{product.description|safe|striptags|truncatechars:35}}</p> -->
+            <p>({{ product.tagline|safe|striptags|truncatechars:40 }})</p>
+            {% go_to_cart_product  product=product request=request.basket.all_lines as available %} 
+            {% if available.basket_product %}
+                {% if available.line.product.percent_discount > 0 %}
+                    <div class="discount_percent">
+                        <span class="pts discount-price">{{available.line.product.percent_discount}}%</span>
+                        <span class="oft">off</span>
+                    
+                    </div>
+                {%endif%}
+            {%else%}
+                {% if product.variants_list.0.percent_discount > 0 %}
+                    <div class="discount_percent">
+                        <span class="pts discount-price">{{product.variants_list.0.percent_discount}}%</span>
+                        <span class="oft">off</span>
+                    </div>
+                {%endif%}
+            {%endif%}
+
+
+            <div class="star_bx">
+                <span class="str_img">
+                    <span class="ctryrpt with_star" style="color:orange">
+                        {% if product.product_rating == 1.0 %}
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                        {% elif product.product_rating == 2.0 %}
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                        {% elif product.product_rating == 3.0 %}
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-line"></i>
+                            <i class="ri-star-line"></i>
+                        {% elif product.product_rating == 4.0 %}
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-line"></i>
+                        {% elif product.product_rating == 5.0 %}
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        {% endif %}
+                    </span>
+                </span>
+                <span class="cnt_vl">{%if product.product_rating_count%}{{product.product_rating_count}}{%endif%}</span>
+            </div>
+
+            <div class="bnyftul">
+                <ul class="bnyftlst">
+                    <li>{{product.product_benefit_1}}</li>
+                    <li>{{product.product_benefit_2}}</li>
+                </ul>
+            </div>
+
+
+
+            <div class="dt_slctor">
+                {% go_to_cart_product  product=product request=request.basket.all_lines as available %} 
+                <select class="form-control variant-select" data-line-id="{{available.line.id}}" data-cart-id="{{request.basket.id}}">
+                    {% for child in product.variants_list %}
+                        {% if child.title == available.basket_product %}
+                            <option value="{{child.id}}" data-discount="{{child.percent_discount}}" data-retail-price="{{child.stockrecords.first.price_retail}}" data-selling-price={{child.stockrecords.first.price_excl_tax}} selected>{{child.title}}</option>
+                        {%else%}
+                            <option value="{{child.id}}" data-description="{{child.additional_information|safe|striptags|truncatechars:50}}" data-discount="{{child.percent_discount}}" data-retail-price="{{child.stockrecords.first.price_retail}}" data-selling-price={{child.stockrecords.first.price_excl_tax}}>{{child.title}}</option>
+                        
+                        {%endif%}
+                    {% endfor %}  
+                </select>
+            </div>
+        
+    
+            <div class="price_bx">
+                {% if available.basket_product %}
+                    {% if available.line.stockrecord.price_retail != available.line.unit_price_excl_tax %}
+                        <h2 class="lssprs product-price product-price-old price-detail">&#8377;{{available.line.stockrecord.price_retail}}</h2>
+                        <h2 class="acprc selling-price">&#8377;{{available.line.unit_price_excl_tax}}</h2>
+                    {%else%}
+                    <h2 class="acprc selling-price">&#8377;{{available.line.unit_price_excl_tax}}</h2>
+                    {%endif%}
+                
+                {% else %}
+                
+                    {% if product.variants_list.0.stockrecords.first.price_retail != product.variants_list.0.stockrecords.first.price_excl_tax %}
+                        <h2 class="lssprs product-price product-price-old price-detail">&#8377;{{product.variants_list.0.stockrecords.first.price_retail}}</h2>
+                        <h2 class="acprc selling-price">&#8377;{{product.variants_list.0.stockrecords.first.price_excl_tax}}</h2>
+                    {%else%}
+                        <h2 class="acprc selling-price">&#8377;{{product.variants_list.0.stockrecords.first.price_excl_tax}}</h2>
+                    {%endif%}
+                
+                        
+                {% endif %}
+
+            </div>
+
+            <div class="freedlrybx">
+                <p><span><img src="{% static 'website/images/ic_check.png' %}" alt="about"></span> FREE Prime Delivery</p>
+            </div>
+
+            {% purchase_info_for_product request product as session %}
+
+            {% if session.availability.is_available_to_buy %}
+            
+                <div class="btn_crtby">
+                    <a class="btn btn_fill go-to-cart-btn flex-btnndn d-none"  href="{% url 'basket:summary' %}" style="background-color:#38b245;border-color: #38b245;">
+                        <!-- <span class="m_icon"><i class="ri-shopping-cart-2-line"></i></span> Go To Cart -->
+                        <span class="m_icon ic_checki">
+                            <i class="ri-check-fill"></i>                                                    
+                        </span> Added
+                    </a>
+                
+                
+                    {% if available.status == True %}
+                    <a class="btn_fill go-to-cart-btn flex-btnn" href="{% url 'basket:summary' %}" style="background-color:#38b245;border-color: #38b245;">
+                        <!-- <span class="m_icon"><i class="ri-shopping-cart-2-fill"></i></span> Go To Cart -->
+                        <span class="m_icon ic_checki">
+                            <i class="ri-check-fill"></i>                                                    
+                        </span> Added
+                    </a>
+
+                    <a class="btn_fill popup-add-to-cart-btn d-none"  id=" popup-add-to-cart" data-bs-toggle="offcanvas" data-bs-target="#cartmodal" aria-controls="offcanvasRight" href="javascript:void(0);">
+                        <span class="m_icon"><i class="ri-shopping-cart-2-fill"></i></span>
+                        <span class="cart-loader-remove">Add To Cart</span>
+                        <i class="fa fa-circle-o-notch fa-spin cart-btn-loader d-none"></i>
+                    </a>    
+                    {%else%}
+                
+                    <a class="btn_fill popup-add-to-cart-btn"  id=" popup-add-to-cart" data-bs-toggle="offcanvas" data-bs-target="#cartmodal" aria-controls="offcanvasRight" href="javascript:void(0);">
+                        <span class="m_icon"><i class="ri-shopping-cart-2-fill"></i>
+                    </span>
+                    <span class="cart-loader-remove">Add To Cart</span>
+                        <i class="fa fa-circle-o-notch fa-spin cart-btn-loader d-none"></i>
+                    </a>
+                    {%endif%}
+                    <a class="btn_outline item-add-to-cart-btn" href="javascript:void(0);">Buy Now</a>
+                </div>
+            {%else%}
+            
+                <div>
+                    {% if product.variants_list|length > 0 %}
+                    {% with product=product.variants_list.0 %}
+                        {% include "catalogue/partials/add_to_basket_form.html" %}
+                    {% endwith %}
+                    {% endif %}                                
+                </div>   
+            {%endif%}
+                        
+
+
+        </div>
+    </div>
+</div>
+{%endif%}
+{%empty%}
+
+    
+<div class="er_p_wrapper">
+    <div class="e404_content text-center">
+        <img src="{% static 'website/images/notf.png' %}" alt="">        
+        <h2 class="">No Result Found</h2>
+        <p>We’re sorry, the product you requested could not be found</p>
+        <!-- <h3>No Results Found</h3> -->
+    </div>
+</div>
+
+
+{%endfor%}

@@ -1,0 +1,56 @@
+{% extends "website/frame.html" %}
+
+{% load staticfiles %}
+{% load image_tags %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load category_saperator %}
+{% load category_tags %}
+{% block customheadend %}
+{% endblock %}
+{% block page-content %}
+        <section class="breadcrumb">
+            <div class="container">
+                <div class="brdcmbx">
+                    <div class="brd-d">
+                        <h3>Health Store</h3>
+                        <ul class="br_submenu">
+                            <li><a href="javascript:void(0);">Home</a></li>                        
+                            <li>Blog</li>
+                        </ul>
+                    </div>                                     
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="blox-section">
+            <div class="container">
+                <div class="blg_bx">
+                    <div class="blg_rptr">
+                        <div class="media"><img class="img-fluid" src="{%static 'website/images/article_image.png' %}" alt=""></div>
+                        <h3>Types of Dry Fruits: 18 List of Dry Fruits Name to Add to Your Diet</h3>
+                        <p>Dry fruits are a good source of nutrients and have great medicinal properties. They are popular amongst people as delicacies but due to their amazing health benefits, they have become a must-buy!</p>
+                        <div class="date"><i class="ri-calendar-event-fill"></i> April 19, 2021</div>
+                        <div class="lnk_btn"><a href="{% url 'catalogue:blog_detail' %}">Read More <i class="ri-arrow-right-s-line"></i></a></div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <section class="nswihlhc section_pdng">
+            <div class="container">
+                <div class="constnw">
+                    <div class="constbx">
+                        <h1>Not sure which is the right plan for you? Get instant help from a leading health coach.</h1>
+                        <a class="btn_fl" href="javascript:void(0);">Consult Now</a>
+                    </div>
+                    <div class="mda_img">
+                        <img src="{%static 'website/images/img_4.png' %}" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{%endblock%}

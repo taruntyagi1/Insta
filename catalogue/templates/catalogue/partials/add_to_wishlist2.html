@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load wishlist_tags %}
+
+{% if user.is_authenticated %}
+    {% with wishlists=user.wishlists.all %}
+        {% wishlists_containing_product wishlists product as product_wishlists %}
+        {% if not product_wishlists %}
+            <form id="add_to_wishlist_form-{{ product.pk }}"
+                  action="{% url 'customer:wishlists-add-product' product_pk=product.pk %}" method="post" class="btn-wishlist">
+                {% csrf_token %}
+                <a href="#" role="button" onclick="document.getElementById('add_to_wishlist_form-{{ product.pk }}').submit();">
+                    <span class="pro-likes"><i class="fas fa-heart  fa-2x mr-1"></i></span>
+                </a>
+            </form>
+        {% else %}
+            {% for wishlist in product_wishlists %}
+                <form id="remove_from_wishlist_form-{{ product.pk }}" action="{% url 'customer:wishlists-remove-product' key=wishlist.key product_pk=product.pk %}" method="post" class="btn-wishlist">
+                    {% csrf_token %}
+                    <a href="#" role="button" onclick="document.getElementById('remove_from_wishlist_form-{{ product.pk }}').submit();">
+                        <span class="pro-likes"><i class="fas fa-heart fa-2x mr-1" style="color:red;"></i></span>
+                    </a>
+                </form>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% else %}
+    <a href="#" title="{% trans 'Please login to add products to a wish list.' %}" class="wishlist-disabled-btn">
+        <span class="pro-likes"><i class="fas fa-heart fa-2x mr-1"></i></span>
+    </a>
+{% endif %}

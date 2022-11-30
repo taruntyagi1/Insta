@@ -1,0 +1,14 @@
+{% load basket_tags %}
+{% load display_tags %}
+{% load i18n %}
+{% load purchase_info_tags %}
+
+{% purchase_info_for_product request product as session %}
+{% if session.availability.is_available_to_buy %}
+    {% basket_form request product as basket_form %}
+        <form id="add_to_basket_form" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="add-to-basket">
+            {% csrf_token %}
+            {% include "oscar/partials/form_fields.html" with form=basket_form %}
+            <!-- <a type="submit" class=" d-none btn-fill button button-primary button-zakaria product-button mt-0 add-to-cart-btn" value="{% trans "Add to basket" %}" data-loading-text="{% trans 'Adding...' %}">Add To Cart</button> -->
+        </form>
+{% endif %}
